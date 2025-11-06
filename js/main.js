@@ -51,7 +51,7 @@ async function generatePdfAndRedirect(data, images) {
     const doc = new jsPDF('p', 'mm', 'a4');
 
     try {
-        // --- LA CREACIÓN DEL PDF SIGUE EXACTAMENTE IGUAL ---
+        // La creación del PDF sigue siendo idéntica
         const logoBase64 = await imageToBase64('img/logo.jpg');
         doc.addImage(logoBase64, 'JPEG', 15, 12, 25, 25, 'logo', 'NONE', 0);
         // ... (todo el código de diseño del PDF que ya funciona)
@@ -122,16 +122,18 @@ async function generatePdfAndRedirect(data, images) {
         if (images.detalle) doc.addImage(images.detalle, 'JPEG', 18, y + 2, imgWidth, imgHeight);
         if (images.etiqueta) doc.addImage(images.etiqueta, 'JPEG', 108, y + 2, imgWidth, imgHeight);
 
-        // Primero, descargamos el PDF
-        const pdfName = `reclamacion_${data.empresa.replace(/\s/g, '_')}_${data.fecha}.pdf`;
-        doc.save(pdfName);
+        // --- CAMBIO CLAVE PARA MÓVILES ---
+        // 1. En lugar de .save(), generamos el PDF como una URL de datos (data URI).
+        const pdfDataUri = doc.output('datauristring');
         
-        // --- CAMBIO CLAVE ---
-        // Preparamos los datos del correo para pasarlos a la siguiente página
+        // 2. Guardamos esa URL en el almacenamiento de la sesión del navegador.
+        // La siguiente página podrá leerla desde aquí.
+        sessionStorage.setItem('pdfDataUri', pdfDataUri);
+        
+        // 3. Preparamos los datos del correo y redirigimos como antes.
         const subject = `Nueva Reclamación de: ${data.empresa} - Factura: ${data.factura}`;
         const body = `Hola,\n\nHas recibido una nueva reclamación de la empresa: ${data.empresa}.\nPersona de contacto: ${data.contacto}.\n\nTodos los detalles y las imágenes están en el archivo PDF adjunto.\n\nSaludos.`;
-
-        // Redirigimos a la página de confirmación, pasando el asunto y el cuerpo como parámetros en la URL
+        
         window.location.href = `confirmacion.html?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
     } catch (error) {
