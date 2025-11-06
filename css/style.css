@@ -39,8 +39,8 @@ header {
 
 .logo {
     width: 120px;
-    height: 120px;
-    border-radius: 50%; /* Hace la imagen circular */
+    height: 80px;
+    border-radius: 20px; /* Hace la imagen circular */
     object-fit: cover; /* Evita que la imagen se deforme */
     border: 2px solid #f97316; /* Borde naranja */
     margin-bottom: 1rem;

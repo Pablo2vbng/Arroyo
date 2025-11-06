@@ -29,8 +29,8 @@ body {
 
 .logo {
     width: 100px; /* Reducido para móviles */
-    height: 100px;
-    border-radius: 50%;
+    height: 80px;
+    border-radius: 20px;
     object-fit: cover;
     border: 2px solid #f97316;
     margin-bottom: 1.5rem;
