@@ -10,6 +10,7 @@ body {
     margin: 0;
     padding: 2rem;
     display: flex;
+    flex-direction: column; /* Cambiado para alinear el footer */
     justify-content: center;
     align-items: center;
     min-height: 100vh;
@@ -18,7 +19,7 @@ body {
 
 .confirm-container {
     background-color: rgba(30, 41, 59, 0.9);
-    padding: 3rem;
+    padding: 2rem 3rem;
     border-radius: 8px;
     border: 1px solid #475569;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
@@ -27,9 +28,9 @@ body {
 }
 
 .logo {
-    width: 120px;
-    height: 80px;
-    border-radius: 20px;
+    width: 100px; /* Reducido para móviles */
+    height: 100px;
+    border-radius: 50%;
     object-fit: cover;
     border: 2px solid #f97316;
     margin-bottom: 1.5rem;
@@ -38,44 +39,67 @@ body {
 h1 {
     color: #fff;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    font-size: 2rem;
+    letter-spacing: 1px;
+    font-size: 1.8rem;
     margin-bottom: 1rem;
 }
 
 p {
-    font-size: 1.1rem;
+    font-size: 1rem;
     line-height: 1.6;
     color: #cbd5e1;
 }
 
-.paso-final {
+/* --- NUEVOS ESTILOS PARA LOS PASOS --- */
+.step {
     margin-top: 2rem;
-    padding: 1rem;
+    padding: 1.5rem;
     background-color: rgba(15, 23, 42, 0.8);
     border-radius: 5px;
-    border-left: 5px solid #f97316;
+    border-left: 5px solid #005A9C; /* Azul para consistencia */
     text-align: left;
 }
 
-.btn-correo {
+.step h2 {
+    margin-top: 0;
+    color: #f97316; /* Naranja */
+    font-size: 1.4em;
+}
+
+.btn-accion {
     display: inline-block;
-    margin-top: 2rem;
-    background-color: #f97316;
-    color: #fff;
+    width: 90%;
+    margin-top: 1rem;
+    padding: 1rem 1.5rem;
     border: none;
-    padding: 1rem 2rem;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 1.2em;
+    font-size: 1.1em;
     font-weight: bold;
     text-transform: uppercase;
     text-decoration: none;
+    text-align: center;
     transition: all 0.3s ease;
 }
 
+.btn-ver-pdf {
+    background-color: #005A9C; /* Azul */
+    color: #fff;
+}
+.btn-ver-pdf:hover {
+    background-color: #004170;
+}
+
+.btn-correo {
+    background-color: #f97316; /* Naranja */
+    color: #fff;
+}
 .btn-correo:hover {
     background-color: #ea580c;
-    box-shadow: 0 0 15px rgba(249, 115, 22, 0.6);
-    transform: translateY(-2px);
+}
+
+footer {
+    width: 100%;
+    max-width: 700px;
+    margin-top: 2rem;
 }

@@ -13,6 +13,7 @@
             <h1>Formulario de Reclamación de Calzado</h1>
         </header>
         <form id="reclamacionForm">
+            <!-- Fieldsets de Datos y Producto (sin cambios) -->
             <fieldset>
                 <legend>Datos del Cliente</legend>
                 <div class="campo">
@@ -56,13 +57,15 @@
                     <textarea id="defecto" name="defecto" rows="4" required></textarea>
                 </div>
             </fieldset>
-
+            
             <fieldset>
                 <legend>Fotografías del Producto</legend>
                 <div class="campo-foto">
                     <label for="fotoDelantera">Foto par delantera:</label>
                     <div class="input-ejemplo">
                         <input type="file" id="fotoDelantera" name="fotoDelantera" accept="image/*" required>
+                        <!-- ===== AÑADIDO ===== -->
+                        <span class="upload-success-message">✓ Imagen seleccionada</span>
                         <div class="ejemplo-wrapper">
                             <img src="img/fotoDelantera.jpg" alt="Ejemplo foto delantera" class="ejemplo-foto">
                             <span class="ejemplo-texto">Ejemplo</span>
@@ -73,6 +76,8 @@
                     <label for="fotoTrasera">Foto par trasera:</label>
                     <div class="input-ejemplo">
                         <input type="file" id="fotoTrasera" name="fotoTrasera" accept="image/*" required>
+                        <!-- ===== AÑADIDO ===== -->
+                        <span class="upload-success-message">✓ Imagen seleccionada</span>
                         <div class="ejemplo-wrapper">
                             <img src="img/fotoTrasera.jpg" alt="Ejemplo foto trasera" class="ejemplo-foto">
                             <span class="ejemplo-texto">Ejemplo</span>
@@ -83,6 +88,8 @@
                     <label for="fotoDetalleDefecto">Foto detalle defecto:</label>
                     <div class="input-ejemplo">
                         <input type="file" id="fotoDetalleDefecto" name="fotoDetalleDefecto" accept="image/*" required>
+                        <!-- ===== AÑADIDO ===== -->
+                        <span class="upload-success-message">✓ Imagen seleccionada</span>
                         <div class="ejemplo-wrapper">
                             <img src="img/fotoDetalleDefecto.jpg" alt="Ejemplo foto detalle defecto" class="ejemplo-foto">
                             <span class="ejemplo-texto">Ejemplo</span>
@@ -93,6 +100,8 @@
                     <label for="fotoEtiqueta">Foto etiqueta:</label>
                     <div class="input-ejemplo">
                         <input type="file" id="fotoEtiqueta" name="fotoEtiqueta" accept="image/*" required>
+                        <!-- ===== AÑADIDO ===== -->
+                        <span class="upload-success-message">✓ Imagen seleccionada</span>
                         <div class="ejemplo-wrapper">
                             <img src="img/fotoEtiqueta.jpg" alt="Ejemplo foto etiqueta" class="ejemplo-foto">
                             <span class="ejemplo-texto">Ejemplo</span>
@@ -110,13 +119,9 @@
                 </small>
             </footer>
         </form>
-
     </div>
 
-    <!-- ===== INICIO DE LA MODIFICACIÓN ===== -->
-     
-  
-    <!-- ===== FIN DE LA MODIFICACIÓN ===== -->
+    
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="js/main.js"></script>

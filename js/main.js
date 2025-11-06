@@ -1,3 +1,30 @@
+// ===== LÓGICA PARA MOSTRAR MENSAJE DE CONFIRMACIÓN AL SUBIR IMAGEN =====
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Seleccionamos todos los inputs de tipo 'file'
+    const fileInputs = document.querySelectorAll('input[type="file"]');
+
+    // 2. A cada uno le añadimos un "escuchador" de eventos de cambio
+    fileInputs.forEach(input => {
+        input.addEventListener('change', (event) => {
+            // Buscamos el elemento de mensaje que está dentro del mismo contenedor
+            const parentContainer = event.target.closest('.input-ejemplo');
+            const successMessage = parentContainer.querySelector('.upload-success-message');
+
+            // Si el usuario ha seleccionado un archivo (la lista de archivos no está vacía)...
+            if (event.target.files.length > 0) {
+                // ...mostramos el mensaje de éxito.
+                successMessage.style.display = 'inline';
+            } else {
+                // Si por alguna razón cancela la selección, ocultamos el mensaje.
+                successMessage.style.display = 'none';
+            }
+        });
+    });
+});
+// =========================================================================
+
+
+// --- LÓGICA PRINCIPAL DEL FORMULARIO ---
 const form = document.getElementById('reclamacionForm');
 const submitButton = form.querySelector('.btn-enviar');
 
@@ -51,10 +78,9 @@ async function generatePdfAndRedirect(data, images) {
     const doc = new jsPDF('p', 'mm', 'a4');
 
     try {
-        // La creación del PDF sigue siendo idéntica
+        // --- CREACIÓN DEL PDF ---
         const logoBase64 = await imageToBase64('img/logo.jpg');
         doc.addImage(logoBase64, 'JPEG', 15, 12, 25, 25, 'logo', 'NONE', 0);
-        // ... (todo el código de diseño del PDF que ya funciona)
         doc.setFont('Helvetica', 'bold');
         doc.setFontSize(22);
         doc.setTextColor('#005A9C');
@@ -122,15 +148,10 @@ async function generatePdfAndRedirect(data, images) {
         if (images.detalle) doc.addImage(images.detalle, 'JPEG', 18, y + 2, imgWidth, imgHeight);
         if (images.etiqueta) doc.addImage(images.etiqueta, 'JPEG', 108, y + 2, imgWidth, imgHeight);
 
-        // --- CAMBIO CLAVE PARA MÓVILES ---
-        // 1. En lugar de .save(), generamos el PDF como una URL de datos (data URI).
+        // --- LÓGICA DE REDIRECCIÓN ---
         const pdfDataUri = doc.output('datauristring');
-        
-        // 2. Guardamos esa URL en el almacenamiento de la sesión del navegador.
-        // La siguiente página podrá leerla desde aquí.
         sessionStorage.setItem('pdfDataUri', pdfDataUri);
         
-        // 3. Preparamos los datos del correo y redirigimos como antes.
         const subject = `Nueva Reclamación de: ${data.empresa} - Factura: ${data.factura}`;
         const body = `Hola,\n\nHas recibido una nueva reclamación de la empresa: ${data.empresa}.\nPersona de contacto: ${data.contacto}.\n\nTodos los detalles y las imágenes están en el archivo PDF adjunto.\n\nSaludos.`;
         
@@ -143,6 +164,7 @@ async function generatePdfAndRedirect(data, images) {
     }
 }
 
+// --- FUNCIONES AUXILIARES ---
 function imageToBase64(url) {
     return fetch(url)
         .then(response => response.blob())
@@ -156,5 +178,5 @@ function imageToBase64(url) {
 
 function resetButton() {
     submitButton.disabled = false;
-    submitButton.textContent = 'Enviar Reclamación';
+    submitButton.textContent = 'Generar Reclamación';
 }

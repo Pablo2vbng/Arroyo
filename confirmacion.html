@@ -9,22 +9,35 @@
 <body>
     <div class="confirm-container">
         <img src="img/logo.jpg" alt="Logo Representaciones Arroyo" class="logo">
-        <h1>¡Reclamación Generada con Éxito!</h1>
+        <h1>¡PDF Generado con Éxito!</h1>
         <p>
-            El archivo PDF con los detalles de tu reclamación se ha descargado en tu dispositivo.
+            Tu reclamación está lista. Por favor, sigue estos dos sencillos pasos:
         </p>
-        <p class="paso-final">
-            El último paso es enviarnos ese archivo. Haz clic en el siguiente botón para abrir tu aplicación de correo. <strong>Solo tienes que adjuntar el PDF y darle a enviar.</strong>
-        </p>
-        <a href="#" id="mailtoLink" class="btn-correo">Abrir Aplicación de Correo y Enviar</a>
-        <footer style="text-align: center; padding: 20px; color: #cbd5e1;">
-            <small>
-                Creado por Pablo Vidal Vidal <br>
-                Teléfono: 670 315 792 | Correo: pablo2vbngdaw@gmail.com <br>
-                &copy; 2025 Todos los derechos reservados.
-            </small>
-        </footer>
+
+        <!-- PASO 1: VER Y GUARDAR EL PDF -->
+        <div class="step">
+            <h2>Paso 1: Guarda tu Reclamación</h2>
+            <p>Haz clic aquí para ver el PDF. Una vez abierto, usa el menú "Compartir" o "Guardar" de tu teléfono para guardarlo en tus archivos.</p>
+            <a href="#" id="viewPdfButton" class="btn-accion btn-ver-pdf" style="display: none;">Ver y Guardar PDF</a>
+            <p id="pdfError" style="display: none; color: #ffcc00;">No se encontró el PDF. Por favor, vuelve atrás y genera la reclamación de nuevo.</p>
+        </div>
+
+        <!-- PASO 2: ENVIAR EL CORREO -->
+        <div class="step">
+            <h2>Paso 2: Envíanos el Correo</h2>
+            <p>Ahora, abre tu aplicación de correo. Estará lista para enviar, <strong>solo tienes que adjuntar el PDF que acabas de guardar</strong>.</p>
+            <a href="#" id="mailtoLink" class="btn-accion btn-correo">Abrir Aplicación de Correo</a>
+            <footer style="text-align: center; padding: 20px; color: #cbd5e1;">
+                <small>
+                    Creado por Pablo Vidal Vidal <br>
+                    Teléfono: 670 315 792 | Correo: pablo2vbngdaw@gmail.com <br>
+                    &copy; 2025 Todos los derechos reservados.
+                </small>
+            </footer>
+        </div>
     </div>
+
+    
 
     <script src="js/confirmacion.js"></script>
 </body>

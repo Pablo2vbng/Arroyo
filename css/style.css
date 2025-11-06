@@ -12,6 +12,7 @@ body {
     margin: 0;
     padding: 2rem;
     display: flex;
+    flex-direction: column; /* Para alinear el footer abajo */
     justify-content: center;
     align-items: center;
     min-height: 100vh;
@@ -36,17 +37,15 @@ header {
     padding-bottom: 1.5rem;
 }
 
-/* --- CAMBIOS AQUÍ --- */
 .logo {
-    width: 170px; /* Reducido de 150px */
-    height: 80px; /* Reducido de 150px */
-    border-radius: 20px; /* Hace la imagen circular */
+    width: 120px;
+    height: 120px;
+    border-radius: 50%; /* Hace la imagen circular */
     object-fit: cover; /* Evita que la imagen se deforme */
-    border: 2px solid #f97316; /* Borde naranja (reducido de 3px) */
+    border: 2px solid #f97316; /* Borde naranja */
     margin-bottom: 1rem;
     box-shadow: 0 4px 10px rgba(0,0,0,0.4); /* Sombra sutil */
 }
-/* --- FIN DE CAMBIOS --- */
 
 h1 {
     color: #fff; /* Blanco */
@@ -136,6 +135,16 @@ input[type="file"] {
     flex-grow: 1;
 }
 
+/* Mensaje de confirmación de subida */
+.upload-success-message {
+    color: #22c55e; /* Verde brillante */
+    font-size: 0.85em;
+    font-weight: bold;
+    margin-left: -5px; /* Ajuste para acercarlo */
+    display: none; /* Oculto por defecto */
+    white-space: nowrap; /* Evita que el texto se parta */
+}
+
 /* Estilo del botón del input file */
 input[type="file"]::file-selector-button {
     background-color: #334155;
@@ -196,6 +205,13 @@ input[type="file"]::file-selector-button:hover {
     transform: translateY(-2px);
 }
 
+/* --- Footer --- */
+footer {
+    width: 100%;
+    max-width: 800px;
+    margin-top: 2rem; /* Espacio sobre el footer */
+}
+
 /* --- Responsive Adjustments --- */
 @media (max-width: 600px) {
     body {
@@ -209,6 +225,13 @@ input[type="file"]::file-selector-button:hover {
         align-items: stretch;
         padding: 10px;
     }
+
+    .upload-success-message {
+        text-align: center;
+        margin-top: 10px;
+        margin-left: 0;
+    }
+
     .ejemplo-wrapper {
         margin-top: 10px;
         align-self: center;
