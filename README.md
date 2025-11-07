@@ -1,6 +1,6 @@
 # Formulario de Reclamación de Garantías
 
-Este proyecto es una aplicación web de una sola página (SPA) diseñada para simplificar y estandarizar el proceso de reclamación de garantías. Fue desarrollada como una solución a medida para un buen amigo de **Representaciones Arroyo**, con el objetivo de proporcionar a sus clientes una herramienta intuitiva y eficiente para reportar incidencias de productos.
+Este proyecto es una aplicación web de una sola página (SPA) diseñada para simplificar y estandarizar el proceso de reclamación de garantías. Fue desarrollada como una solución a medida para un buen amigo **Representaciones Arroyo**, con el objetivo de proporcionar a sus clientes una herramienta intuitiva y eficiente para reportar incidencias de productos.
 
 La aplicación funciona del lado del cliente, sin necesidad de un backend o una base de datos, lo que la hace ligera, rápida y fácil de desplegar en cualquier servicio de hosting estático.
 
