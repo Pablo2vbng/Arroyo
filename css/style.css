@@ -1,7 +1,5 @@
-/* --- Google Font Import --- */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
-/* --- General Body Styling --- */
 body {
     font-family: 'Roboto', sans-serif;
     background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.85)), url(https://www.publicdomainpictures.net/pictures/320000/velka/background-15814524273L3.jpg);
@@ -17,7 +15,6 @@ body {
     min-height: 100vh;
 }
 
-/* --- Form Container --- */
 .container {
     background-color: rgba(30, 41, 59, 0.9);
     padding: 2.5rem;
@@ -28,302 +25,53 @@ body {
     max-width: 800px;
 }
 
-/* --- Header & Logo --- */
-header {
-    text-align: center;
-    margin-bottom: 2rem;
-    border-bottom: 2px solid #f97316;
-    padding-bottom: 1.5rem;
-}
+header { text-align: center; margin-bottom: 2rem; border-bottom: 2px solid #f97316; padding-bottom: 1.5rem; }
+.logo { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 2px solid #f97316; margin-bottom: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.4); }
+h1 { color: #fff; text-transform: uppercase; letter-spacing: 2px; font-size: 1.8rem; margin: 0; }
+fieldset { border: 1px solid #475569; border-radius: 5px; padding: 1.5rem; margin-bottom: 2rem; position: relative; }
+legend { font-weight: bold; color: #f97316; padding: 0 10px; font-size: 1.2em; text-transform: uppercase; background-color: #1e293b; position: absolute; top: -0.8em; left: 1em; }
+.campo, .campo-foto { margin-bottom: 1.2rem; }
+label { display: block; margin-bottom: 0.5rem; font-weight: bold; color: #cbd5e1; }
+input[type="text"], input[type="date"], input[type="tel"], textarea, input[type="file"] { width: 100%; padding: 0.8rem; border: 1px solid #475569; border-radius: 4px; box-sizing: border-box; font-size: 1em; background-color: #0f172a; color: #f1f5f9; transition: all 0.3s ease; }
+input[type="text"]:focus, input[type="date"]:focus, input[type="tel"]:focus, textarea:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+textarea { resize: vertical; min-height: 100px; }
 
-.logo {
-    width: 120px;
-    height: 80px;
-    border-radius: 20px;
-    object-fit: cover;
-    border: 2px solid #f97316;
-    margin-bottom: 1rem;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-}
+.input-ejemplo { display: flex; align-items: center; gap: 15px; background-color: #0f172a; border: 1px solid #475569; border-radius: 4px; padding-right: 10px; }
+input[type="file"] { border: none; flex-grow: 1; }
+.upload-success-message { color: #22c55e; font-size: 0.85em; font-weight: bold; margin-left: -5px; display: none; white-space: nowrap; }
+input[type="file"]::file-selector-button { background-color: #334155; border: none; padding: 0.8rem; color: #f1f5f9; cursor: pointer; margin-right: 1rem; transition: background-color 0.3s ease; }
+input[type="file"]::file-selector-button:hover { background-color: #475569; }
+.ejemplo-foto { width: 70px; height: 70px; border-radius: 50%; border: 3px solid #f97316; object-fit: cover; }
+.ejemplo-wrapper { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.ejemplo-texto { color: #cbd5e1; font-size: 0.7em; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
 
-h1 {
-    color: #fff;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-size: 1.8rem;
-    margin: 0;
-}
+.btn-enviar { background-color: #f97316; color: #fff; border: none; padding: 1rem; border-radius: 5px; cursor: pointer; font-size: 1.2em; font-weight: bold; text-transform: uppercase; width: 100%; transition: all 0.3s ease; letter-spacing: 1px; }
+.btn-enviar:hover { background-color: #ea580c; box-shadow: 0 0 15px rgba(249, 115, 22, 0.6); transform: translateY(-2px); }
 
-/* --- Fieldsets & Legends --- */
-fieldset {
-    border: 1px solid #475569;
-    border-radius: 5px;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-    position: relative;
-}
+/* Confirmation Message Styles (for Android/PC) */
+#confirmationMessage .step { margin-top: 2rem; padding: 1.5rem; background-color: rgba(15, 23, 42, 0.8); border-radius: 5px; border-left: 5px solid #f97316; text-align: left; }
+#confirmationMessage .step h2 { margin-top: 0; color: #f97316; font-size: 1.4em; }
+#confirmationMessage .btn-accion { display: block; width: 90%; margin: 1.5rem auto 0 auto; padding: 1rem 1.5rem; border: none; border-radius: 5px; cursor: pointer; font-size: 1.1em; font-weight: bold; text-transform: uppercase; text-decoration: none; text-align: center; transition: all 0.3s ease; }
+#confirmationMessage .btn-correo { background-color: #f97316; color: #fff; }
+#confirmationMessage .btn-correo:hover { background-color: #ea580c; }
+#confirmationMessage .btn-nuevo-form { margin-top: 2rem; background: none; border: 2px solid #475569; color: #cbd5e1; padding: 0.8rem 1.5rem; font-size: 0.9em; font-weight: bold; border-radius: 5px; cursor: pointer; transition: all 0.3s ease; }
+#confirmationMessage .btn-nuevo-form:hover { background-color: #475569; color: #fff; }
 
-legend {
-    font-weight: bold;
-    color: #f97316;
-    padding: 0 10px;
-    font-size: 1.2em;
-    text-transform: uppercase;
-    background-color: #1e293b;
-    position: absolute;
-    top: -0.8em;
-    left: 1em;
-}
-
-/* --- Form Fields --- */
-.campo, .campo-foto {
-    margin-bottom: 1.2rem;
-}
-
-label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-    color: #cbd5e1;
-}
-
-input[type="text"], input[type="date"], input[type="tel"], textarea, input[type="file"] {
-    width: 100%;
-    padding: 0.8rem;
-    border: 1px solid #475569;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-size: 1em;
-    background-color: #0f172a;
-    color: #f1f5f9;
-    transition: all 0.3s ease;
-}
-
-/* --- Focus Effect --- */
-input[type="text"]:focus, input[type="date"]:focus, input[type="tel"]:focus, textarea:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
-}
-
-textarea {
-    resize: vertical;
-    min-height: 100px;
-}
-
-/* --- File Input & Image Previews --- */
-.input-ejemplo {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    background-color: #0f172a;
-    border: 1px solid #475569;
-    border-radius: 4px;
-    padding-right: 10px;
-}
-
-input[type="file"] {
-    border: none;
-    flex-grow: 1;
-}
-
-.upload-success-message {
-    color: #22c55e;
-    font-size: 0.85em;
-    font-weight: bold;
-    margin-left: -5px;
-    display: none;
-    white-space: nowrap;
-}
-
-input[type="file"]::file-selector-button {
-    background-color: #334155;
-    border: none;
-    padding: 0.8rem;
-    color: #f1f5f9;
-    cursor: pointer;
-    margin-right: 1rem;
-    transition: background-color 0.3s ease;
-}
-
-input[type="file"]::file-selector-button:hover {
-    background-color: #475569;
-}
-
-.ejemplo-foto {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    border: 3px solid #f97316;
-    object-fit: cover;
-}
-
-.ejemplo-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-}
-
-.ejemplo-texto {
-    color: #cbd5e1;
-    font-size: 0.7em;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* --- Submit Button --- */
-.btn-enviar {
-    background-color: #f97316;
-    color: #fff;
-    border: none;
-    padding: 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1.2em;
-    font-weight: bold;
-    text-transform: uppercase;
-    width: 100%;
-    transition: all 0.3s ease;
-    letter-spacing: 1px;
-}
-
-.btn-enviar:hover {
-    background-color: #ea580c;
-    box-shadow: 0 0 15px rgba(249, 115, 22, 0.6);
-    transform: translateY(-2px);
-}
-
-/* --- Confirmation Message Styles --- */
-#confirmationMessage .step {
-    margin-top: 2rem;
-    padding: 1.5rem;
-    background-color: rgba(15, 23, 42, 0.8);
-    border-radius: 5px;
-    border-left: 5px solid #f97316;
-    text-align: left;
-}
-
-#confirmationMessage .step h2 {
-    margin-top: 0;
-    color: #f97316;
-    font-size: 1.4em;
-}
-
-#confirmationMessage .btn-accion {
-    display: block;
-    width: 90%;
-    margin: 1.5rem auto 0 auto;
-    padding: 1rem 1.5rem;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1.1em;
-    font-weight: bold;
-    text-transform: uppercase;
-    text-decoration: none;
-    text-align: center;
-    transition: all 0.3s ease;
-}
-
-#confirmationMessage .btn-correo {
-    background-color: #f97316;
-    color: #fff;
-}
-
-#confirmationMessage .btn-correo:hover {
-    background-color: #ea580c;
-}
-
-#confirmationMessage .btn-nuevo-form {
-    margin-top: 2rem;
-    background: none;
-    border: 2px solid #475569;
-    color: #cbd5e1;
-    padding: 0.8rem 1.5rem;
-    font-size: 0.9em;
-    font-weight: bold;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-#confirmationMessage .btn-nuevo-form:hover {
-    background-color: #475569;
-    color: #fff;
-}
-
-/* ===== INICIO DE LA MODIFICACIÓN: Animación de Brillo ===== */
-
-/* 1. Definimos la animación "glow" */
 @keyframes glow {
-    0%, 100% {
-        /* Estado inicial y final: un brillo sutil */
-        text-shadow: 0 0 5px rgba(249, 115, 22, 0.5);
-    }
-    50% {
-        /* Estado intermedio: el brillo es más intenso y el texto más claro */
-        color: #fff;
-        text-shadow: 0 0 15px #f97316, 0 0 20px #f97316;
-    }
+    0%, 100% { text-shadow: 0 0 5px rgba(249, 115, 22, 0.5); }
+    50% { color: #fff; text-shadow: 0 0 15px #f97316, 0 0 20px #f97316; }
 }
+#confirmationMessage .glow { color: #f97316; animation: glow 2s ease-in-out infinite; }
 
-/* 2. Aplicamos la animación al texto en negrita del mensaje de confirmación */
-#confirmationMessage strong {
-    color: #f97316; /* Color naranja base para que siempre destaque */
-    animation: glow 2s ease-in-out infinite; /* Aplicamos la animación en un bucle infinito */
-}
-/* ===== FIN DE LA MODIFICACIÓN ===== */
+footer { width: 100%; max-width: 800px; margin-top: 2rem; }
+.contact-info { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 10px 20px; margin: 8px 0; }
+.contact-item { display: flex; align-items: center; gap: 8px; }
+.contact-icon { width: 1em; height: 1em; }
 
-
-/* --- Footer --- */
-footer {
-    width: 100%;
-    max-width: 800px;
-    margin-top: 2rem;
-}
-
-.contact-info {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px 20px;
-    margin: 8px 0;
-}
-
-.contact-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.contact-icon {
-    width: 1em;
-    height: 1em;
-}
-
-/* --- Responsive Adjustments --- */
 @media (max-width: 600px) {
-    body {
-        padding: 1rem;
-    }
-    .container {
-        padding: 1.5rem;
-    }
-    .input-ejemplo {
-        flex-direction: column;
-        align-items: stretch;
-        padding: 10px;
-    }
-    .upload-success-message {
-        text-align: center;
-        margin-top: 10px;
-        margin-left: 0;
-    }
-    .ejemplo-wrapper {
-        margin-top: 10px;
-        align-self: center;
-    }
+    body { padding: 1rem; }
+    .container { padding: 1.5rem; }
+    .input-ejemplo { flex-direction: column; align-items: stretch; padding: 10px; }
+    .upload-success-message { text-align: center; margin-top: 10px; margin-left: 0; }
+    .ejemplo-wrapper { margin-top: 10px; align-self: center; }
 }
