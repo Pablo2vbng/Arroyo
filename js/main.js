@@ -1,18 +1,15 @@
+// --- LÓGICA DE INTERFAZ (SIN CAMBIOS) ---
 document.addEventListener('DOMContentLoaded', () => {
-    // --- 1. LÓGICA PARA GUARDAR Y RESTAURAR DATOS DEL FORMULARIO ---
+    // LÓGICA PARA GUARDAR Y RESTAURAR DATOS DEL FORMULARIO
     const form = document.getElementById('reclamacionForm');
     const formFields = form.querySelectorAll('input[type="text"], input[type="date"], input[type="tel"], textarea');
 
-    // FUNCIÓN PARA GUARDAR DATOS EN LOCALSTORAGE
     const saveData = () => {
         formFields.forEach(field => {
-            // Usamos el 'id' del campo como clave para guardarlo
             localStorage.setItem(field.id, field.value);
         });
-        console.log("Datos del formulario guardados.");
     };
 
-    // FUNCIÓN PARA CARGAR DATOS DESDE LOCALSTORAGE
     const loadData = () => {
         formFields.forEach(field => {
             const savedValue = localStorage.getItem(field.id);
@@ -20,19 +17,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 field.value = savedValue;
             }
         });
-        console.log("Datos del formulario restaurados.");
     };
 
-    // Añadimos un "escuchador" a cada campo para que guarde al escribir
     formFields.forEach(field => {
         field.addEventListener('input', saveData);
     });
-
-    // Cargamos los datos guardados tan pronto como la página esté lista
     loadData();
 
-
-    // --- 2. LÓGICA PARA MENSAJE DE CONFIRMACIÓN DE IMAGEN ---
+    // LÓGICA PARA MENSAJE DE CONFIRMACIÓN DE IMAGEN
     const fileInputs = document.querySelectorAll('input[type="file"]');
     fileInputs.forEach(input => {
         input.addEventListener('change', (event) => {
@@ -47,8 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-
-// --- 3. LÓGICA PRINCIPAL DEL FORMULARIO (ENVÍO) ---
+// --- LÓGICA PRINCIPAL DEL FORMULARIO (ENVÍO) ---
 const form = document.getElementById('reclamacionForm');
 const submitButton = form.querySelector('.btn-enviar');
 
@@ -57,7 +48,6 @@ form.addEventListener('submit', function(event) {
     submitButton.disabled = true;
     submitButton.textContent = 'Generando PDF...';
 
-    // LIMPIAMOS LOCALSTORAGE DESPUÉS DE UN ENVÍO EXITOSO
     const formFields = form.querySelectorAll('input[type="text"], input[type="date"], input[type="tel"], textarea');
     formFields.forEach(field => {
         localStorage.removeItem(field.id);
@@ -104,81 +94,99 @@ form.addEventListener('submit', function(event) {
 });
 
 
-// --- EL RESTO DE FUNCIONES (SIN CAMBIOS) ---
+// =========================================================================
+// ===== INICIO DE LA MODIFICACIÓN: NUEVA FUNCIÓN DE CREACIÓN DE PDF =====
+// =========================================================================
 async function generatePdfAndRedirect(data, images) {
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF('p', 'mm', 'a4');
+    const doc = new jsPDF('p', 'mm', 'a4'); // p: portrait, mm: milímetros, a4: tamaño de hoja
 
     try {
-        const logoBase64 = await imageToBase64('img/logo.jpg');
-        doc.addImage(logoBase64, 'JPEG', 15, 12, 25, 25, 'logo', 'NONE', 0);
+        // --- 1. CARGAR LOGO DE U-POWER ---
+        const upowerLogoBase64 = await imageToBase64('img/upower.avif');
+
+        // --- 2. DIBUJAR LA ESTRUCTURA DEL PDF ---
+        const margin = 10;
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const contentWidth = pageWidth - (margin * 2);
+        
+        // --- Cabecera ---
+        doc.addImage(upowerLogoBase64, 'WEBP', margin, 5, 25, 10); // Usamos WEBP como formato genérico para AVIF
+        doc.setFontSize(14);
         doc.setFont('Helvetica', 'bold');
-        doc.setFontSize(22);
-        doc.setTextColor('#005A9C');
-        doc.text('Reclamación de Producto', 50, 25);
-        doc.setFont('Helvetica', 'normal');
-        doc.setFontSize(10);
-        doc.setTextColor('#333333');
-        doc.text(`Nº Reclamación: ${data.factura}-${data.fecha}`, 50, 32);
-        doc.setDrawColor('#f97316');
+        doc.setTextColor(255, 0, 0); // Rojo
+        doc.text('RECLAMACION DE GARANTÍAS', pageWidth / 2, 10, { align: 'center' });
+        doc.setDrawColor(0, 0, 0); // Borde negro
         doc.setLineWidth(0.5);
-        doc.line(15, 45, 195, 45);
+        doc.line(margin, 15, pageWidth - margin, 15); // Línea bajo el título
 
-        let y = 55;
-        doc.setFontSize(14);
-        doc.setFont('Helvetica', 'bold');
-        doc.setTextColor('#f97316');
-        doc.text('Datos del Cliente', 15, y);
-        y += 8;
-
-        doc.setFontSize(11);
-        doc.setFont('Helvetica', 'normal');
-        doc.setTextColor('#000000');
-        doc.text(`Fecha: ${data.fecha}`, 20, y);
-        doc.text(`Empresa: ${data.empresa}`, 100, y);
-        y += 7;
-        doc.text(`Nº Factura: ${data.factura}`, 20, y);
-        doc.text(`Teléfono: ${data.telefono}`, 100, y);
-        y += 7;
-        doc.text(`Contacto: ${data.contacto}`, 20, y);
-        y += 12;
-
-        doc.setFontSize(14);
-        doc.setFont('Helvetica', 'bold');
-        doc.setTextColor('#f97316');
-        doc.text('Detalles del Producto', 15, y);
-        y += 8;
-
-        doc.setFontSize(11);
-        doc.setFont('Helvetica', 'normal');
-        doc.setTextColor('#000000');
-        doc.text(`Modelo: ${data.modelo}`, 20, y);
-        doc.text(`Referencia: ${data.referencia}`, 70, y);
-        doc.text(`Talla: ${data.talla}`, 140, y);
-        y += 10;
+        let y = 20; // Posición Y inicial
+        const fieldHeight = 8;
+        const labelWidth = 30;
+        const dataWidth = 60;
+        const col1X = margin;
+        const col2X = margin + labelWidth + dataWidth + 10;
         
-        doc.setFont('Helvetica', 'bold');
-        doc.text('Descripción del Defecto:', 20, y);
-        y += 6;
-        doc.setFont('Helvetica', 'normal');
-        const splitDescription = doc.splitTextToSize(data.defecto, 170);
-        doc.text(splitDescription, 20, y);
-        y += (splitDescription.length * 5) + 10;
+        // --- Función auxiliar para dibujar un campo ---
+        const drawField = (label, value, x, yPos) => {
+            doc.setFontSize(9);
+            doc.setFont('Helvetica', 'bold');
+            doc.setFillColor(230, 230, 230); // Gris claro para etiquetas
+            doc.rect(x, yPos, labelWidth, fieldHeight, 'FD'); // Caja de etiqueta (Fill y Draw)
+            doc.setTextColor(0, 0, 0);
+            doc.text(label, x + 2, yPos + 5);
 
-        doc.setFontSize(14);
-        doc.setFont('Helvetica', 'bold');
-        doc.setTextColor('#f97316');
-        doc.text('Fotografías Adjuntas', 15, y);
-        y += 8;
+            doc.rect(x + labelWidth, yPos, dataWidth, fieldHeight, 'S'); // Caja de datos (Solo Stroke)
+            doc.setFont('Helvetica', 'normal');
+            doc.text(value || '', x + labelWidth + 2, yPos + 5);
+        };
+
+        // --- Dibujar Campos en Dos Columnas ---
+        drawField('FECHA', data.fecha, col1X, y);
+        drawField('AGENTE', 'Representaciones Arroyo', col2X, y);
+        y += fieldHeight;
+
+        drawField('CLIENTE', data.empresa, col1X, y); // 'empresa' del form es 'CLIENTE' aquí
+        drawField('CONTACTO', data.contacto, col2X, y);
+        y += fieldHeight;
+
+        drawField('MODELO', data.modelo, col1X, y);
+        y += fieldHeight;
         
-        const imgWidth = 80;
-        const imgHeight = 60;
-        if (images.delantera) doc.addImage(images.delantera, 'JPEG', 18, y + 2, imgWidth, imgHeight);
-        if (images.trasera) doc.addImage(images.trasera, 'JPEG', 108, y + 2, imgWidth, imgHeight);
-        y += imgHeight + 10;
-        if (images.detalle) doc.addImage(images.detalle, 'JPEG', 18, y + 2, imgWidth, imgHeight);
-        if (images.etiqueta) doc.addImage(images.etiqueta, 'JPEG', 108, y + 2, imgWidth, imgHeight);
+        drawField('REF', data.referencia, col1X, y);
+        y += fieldHeight;
+        
+        drawField('TALLA', data.talla, col1X, y);
+        y += fieldHeight + 5; // Espacio extra
 
+        // --- Campo de Descripción ---
+        doc.setFontSize(9);
+        doc.setFont('Helvetica', 'bold');
+        doc.text('DESCRIPCIÓN DEFECTO', col1X, y);
+        y += 3;
+        const descHeight = 30;
+        doc.rect(col1X, y, contentWidth, descHeight, 'S');
+        doc.setFont('Helvetica', 'normal');
+        const splitDescription = doc.splitTextToSize(data.defecto, contentWidth - 4); // Ajustar texto
+        doc.text(splitDescription, col1X + 2, y + 5);
+        y += descHeight + 5;
+
+        // --- Área de Fotografías ---
+        const photoAreaHeight = doc.internal.pageSize.getHeight() - y - margin;
+        doc.setFillColor(245, 245, 245); // Gris muy claro para el fondo
+        doc.rect(margin, y, contentWidth, photoAreaHeight, 'F');
+        
+        // Colocar imágenes en una cuadrícula 2x2 dentro del área
+        const photoMargin = 5;
+        const photoGridWidth = (contentWidth - photoMargin) / 2;
+        const photoGridHeight = (photoAreaHeight - photoMargin) / 2;
+
+        if (images.delantera) doc.addImage(images.delantera, 'JPEG', col1X, y, photoGridWidth, photoGridHeight);
+        if (images.trasera) doc.addImage(images.trasera, 'JPEG', col1X + photoGridWidth + photoMargin, y, photoGridWidth, photoGridHeight);
+        if (images.detalle) doc.addImage(images.detalle, 'JPEG', col1X, y + photoGridHeight + photoMargin, photoGridWidth, photoGridHeight);
+        if (images.etiqueta) doc.addImage(images.etiqueta, 'JPEG', col1X + photoGridWidth + photoMargin, y + photoGridHeight + photoMargin, photoGridWidth, photoGridHeight);
+        
+        // --- 3. LÓGICA DE REDIRECCIÓN (SIN CAMBIOS) ---
         const pdfDataUri = doc.output('datauristring');
         sessionStorage.setItem('pdfDataUri', pdfDataUri);
         
@@ -193,7 +201,12 @@ async function generatePdfAndRedirect(data, images) {
         resetButton();
     }
 }
+// =========================================================================
+// ===== FIN DE LA MODIFICACIÓN =====
+// =========================================================================
 
+
+// --- FUNCIONES AUXILIARES (SIN CAMBIOS) ---
 function imageToBase64(url) {
     return fetch(url)
         .then(response => response.blob())
