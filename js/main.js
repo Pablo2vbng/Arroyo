@@ -1,30 +1,54 @@
-// ===== LÓGICA PARA MOSTRAR MENSAJE DE CONFIRMACIÓN AL SUBIR IMAGEN =====
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Seleccionamos todos los inputs de tipo 'file'
-    const fileInputs = document.querySelectorAll('input[type="file"]');
+    // --- 1. LÓGICA PARA GUARDAR Y RESTAURAR DATOS DEL FORMULARIO ---
+    const form = document.getElementById('reclamacionForm');
+    const formFields = form.querySelectorAll('input[type="text"], input[type="date"], input[type="tel"], textarea');
 
-    // 2. A cada uno le añadimos un "escuchador" de eventos de cambio
+    // FUNCIÓN PARA GUARDAR DATOS EN LOCALSTORAGE
+    const saveData = () => {
+        formFields.forEach(field => {
+            // Usamos el 'id' del campo como clave para guardarlo
+            localStorage.setItem(field.id, field.value);
+        });
+        console.log("Datos del formulario guardados.");
+    };
+
+    // FUNCIÓN PARA CARGAR DATOS DESDE LOCALSTORAGE
+    const loadData = () => {
+        formFields.forEach(field => {
+            const savedValue = localStorage.getItem(field.id);
+            if (savedValue) {
+                field.value = savedValue;
+            }
+        });
+        console.log("Datos del formulario restaurados.");
+    };
+
+    // Añadimos un "escuchador" a cada campo para que guarde al escribir
+    formFields.forEach(field => {
+        field.addEventListener('input', saveData);
+    });
+
+    // Cargamos los datos guardados tan pronto como la página esté lista
+    loadData();
+
+
+    // --- 2. LÓGICA PARA MENSAJE DE CONFIRMACIÓN DE IMAGEN ---
+    const fileInputs = document.querySelectorAll('input[type="file"]');
     fileInputs.forEach(input => {
         input.addEventListener('change', (event) => {
-            // Buscamos el elemento de mensaje que está dentro del mismo contenedor
             const parentContainer = event.target.closest('.input-ejemplo');
             const successMessage = parentContainer.querySelector('.upload-success-message');
-
-            // Si el usuario ha seleccionado un archivo (la lista de archivos no está vacía)...
             if (event.target.files.length > 0) {
-                // ...mostramos el mensaje de éxito.
                 successMessage.style.display = 'inline';
             } else {
-                // Si por alguna razón cancela la selección, ocultamos el mensaje.
                 successMessage.style.display = 'none';
             }
         });
     });
 });
-// =========================================================================
 
 
-// --- LÓGICA PRINCIPAL DEL FORMULARIO ---
+// --- 3. LÓGICA PRINCIPAL DEL FORMULARIO (ENVÍO) ---
 const form = document.getElementById('reclamacionForm');
 const submitButton = form.querySelector('.btn-enviar');
 
@@ -32,6 +56,12 @@ form.addEventListener('submit', function(event) {
     event.preventDefault();
     submitButton.disabled = true;
     submitButton.textContent = 'Generando PDF...';
+
+    // LIMPIAMOS LOCALSTORAGE DESPUÉS DE UN ENVÍO EXITOSO
+    const formFields = form.querySelectorAll('input[type="text"], input[type="date"], input[type="tel"], textarea');
+    formFields.forEach(field => {
+        localStorage.removeItem(field.id);
+    });
 
     const formData = new FormData(form);
     const data = {};
@@ -73,12 +103,13 @@ form.addEventListener('submit', function(event) {
         });
 });
 
+
+// --- EL RESTO DE FUNCIONES (SIN CAMBIOS) ---
 async function generatePdfAndRedirect(data, images) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('p', 'mm', 'a4');
 
     try {
-        // --- CREACIÓN DEL PDF ---
         const logoBase64 = await imageToBase64('img/logo.jpg');
         doc.addImage(logoBase64, 'JPEG', 15, 12, 25, 25, 'logo', 'NONE', 0);
         doc.setFont('Helvetica', 'bold');
@@ -148,7 +179,6 @@ async function generatePdfAndRedirect(data, images) {
         if (images.detalle) doc.addImage(images.detalle, 'JPEG', 18, y + 2, imgWidth, imgHeight);
         if (images.etiqueta) doc.addImage(images.etiqueta, 'JPEG', 108, y + 2, imgWidth, imgHeight);
 
-        // --- LÓGICA DE REDIRECCIÓN ---
         const pdfDataUri = doc.output('datauristring');
         sessionStorage.setItem('pdfDataUri', pdfDataUri);
         
@@ -164,7 +194,6 @@ async function generatePdfAndRedirect(data, images) {
     }
 }
 
-// --- FUNCIONES AUXILIARES ---
 function imageToBase64(url) {
     return fetch(url)
         .then(response => response.blob())
