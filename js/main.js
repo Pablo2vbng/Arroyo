@@ -99,13 +99,15 @@ async function generatePdfAndShowConfirmation(data, images) {
     const doc = new jsPDF('p', 'mm', 'a4');
 
     try {
-        // --- LA CREACIÓN DEL PDF SIGUE SIENDO LA MISMA ---
-        const upowerLogoBase64 = await imageToBase64('img/upower.avif');
+        // ===== CAMBIO CLAVE AQUÍ: Se usa .png en lugar de .avif =====
+        const upowerLogoBase64 = await imageToBase64('img/upower.png');
+        
         const margin = 10;
         const pageWidth = doc.internal.pageSize.getWidth();
         const contentWidth = pageWidth - (margin * 2);
         
-        doc.addImage(upowerLogoBase64, 'WEBP', margin, 5, 25, 10);
+        // Se especifica el formato 'PNG'
+        doc.addImage(upowerLogoBase64, 'PNG', margin, 5, 25, 10);
         doc.setFontSize(14);
         doc.setFont('Helvetica', 'bold');
         doc.setTextColor(255, 0, 0);
@@ -152,7 +154,6 @@ async function generatePdfAndShowConfirmation(data, images) {
         if (images.detalle) doc.addImage(images.detalle, 'JPEG', col1X, y + photoGridHeight + photoMargin, photoGridWidth, photoGridHeight);
         if (images.etiqueta) doc.addImage(images.etiqueta, 'JPEG', col1X + photoGridWidth + photoMargin, y + photoGridHeight + photoMargin, photoGridWidth, photoGridHeight);
         
-        // --- LÓGICA CLAVE DE LA SOLUCIÓN ---
         const pdfBlob = doc.output('blob');
         const blobUrl = URL.createObjectURL(pdfBlob);
         window.open(blobUrl, '_blank');
@@ -169,7 +170,6 @@ async function generatePdfAndShowConfirmation(data, images) {
         formContainer.style.display = 'none';
         confirmationMessage.style.display = 'block';
 
-        // Limpiamos los datos guardados ahora que el proceso ha finalizado con éxito
         const formFields = form.querySelectorAll('input[type="text"], input[type="date"], input[type="tel"], textarea');
         formFields.forEach(field => {
             localStorage.removeItem(field.id);
