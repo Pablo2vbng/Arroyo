@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Lógica de persistencia (sin cambios)
     const form = document.getElementById('reclamacionForm');
     if (form) {
         const formFields = form.querySelectorAll('input[type="text"], input[type="date"], input[type="tel"], textarea');
@@ -25,7 +26,7 @@ const submitButton = form.querySelector('.btn-enviar');
 form.addEventListener('submit', function(event) {
     event.preventDefault();
     submitButton.disabled = true;
-    submitButton.textContent = 'Generando PDF...';
+    submitButton.textContent = 'Procesando...';
 
     const formData = new FormData(form);
     const data = {};
@@ -49,7 +50,8 @@ form.addEventListener('submit', function(event) {
     Promise.all(filePromises)
         .then(imagesBase64 => {
             const [delantera, trasera, detalle, etiqueta] = imagesBase64;
-            generatePdfAndRedirect(data, { delantera, trasera, detalle, etiqueta });
+            // Pasamos los datos "en crudo" a la siguiente función
+            handlePdfGeneration(data, { delantera, trasera, detalle, etiqueta });
         })
         .catch(error => {
             alert(error.message || 'Hubo un problema al cargar las imágenes.');
@@ -57,45 +59,28 @@ form.addEventListener('submit', function(event) {
         });
 });
 
-async function generatePdfAndRedirect(data, images) {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF('p', 'mm', 'a4');
+async function handlePdfGeneration(data, images) {
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    
+    const subject = `Nueva Reclamación de: ${data.empresa} - Factura: ${data.factura}`;
+    const body = `Hola,\n\nHas recibido una nueva reclamación de la empresa: ${data.empresa}.\nPersona de contacto: ${data.contacto}.\n\nTodos los detalles y las imágenes están en el archivo PDF adjunto.\n\nSaludos.`;
+    
+    // Limpiamos los datos del autoguardado
+    const formFields = form.querySelectorAll('input[type="text"], input[type="date"], input[type="tel"], textarea');
+    formFields.forEach(field => { localStorage.removeItem(field.id); });
 
-    try {
-        const margin = 10;
-        const pageWidth = doc.internal.pageSize.getWidth();
-        const contentWidth = pageWidth - (margin * 2);
-        try { const upowerLogoBase64 = await imageToBase64('img/upower.png'); doc.addImage(upowerLogoBase64, 'PNG', margin, 5, 25, 10); } catch (logoError) { console.warn('Logo de U-Power no encontrado.'); }
-        doc.setFontSize(14); doc.setFont('Helvetica', 'bold'); doc.setTextColor(255, 0, 0); doc.text('RECLAMACION DE GARANTÍAS', pageWidth / 2, 10, { align: 'center' });
-        doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.5); doc.line(margin, 15, pageWidth - margin, 15);
-        let y = 20; const fieldHeight = 8; const labelWidth = 30; const dataWidth = 60; const col1X = margin; const col2X = margin + labelWidth + dataWidth + 10;
-        const drawField = (label, value, x, yPos) => { doc.setFontSize(9); doc.setFont('Helvetica', 'bold'); doc.setFillColor(230, 230, 230); doc.rect(x, yPos, labelWidth, fieldHeight, 'FD'); doc.setTextColor(0, 0, 0); doc.text(label, x + 2, yPos + 5); doc.rect(x + labelWidth, yPos, dataWidth, fieldHeight, 'S'); doc.setFont('Helvetica', 'normal'); doc.text(value || '', x + labelWidth + 2, yPos + 5); };
-        drawField('FECHA', data.fecha, col1X, y); drawField('AGENTE', 'Representaciones Arroyo', col2X, y); y += fieldHeight;
-        drawField('CLIENTE', data.empresa, col1X, y); drawField('CONTACTO', data.contacto, col2X, y); y += fieldHeight;
-        drawField('MODELO', data.modelo, col1X, y); y += fieldHeight;
-        drawField('REF', data.referencia, col1X, y); y += fieldHeight;
-        drawField('TALLA', data.talla, col1X, y); y += fieldHeight + 5;
-        doc.setFontSize(9); doc.setFont('Helvetica', 'bold'); doc.text('DESCRIPCIÓN DEFECTO', col1X, y); y += 3;
-        const descHeight = 30; doc.rect(col1X, y, contentWidth, descHeight, 'S'); doc.setFont('Helvetica', 'normal'); const splitDescription = doc.splitTextToSize(data.defecto, contentWidth - 4); doc.text(splitDescription, col1X + 2, y + 5); y += descHeight + 5;
-        const photoAreaHeight = doc.internal.pageSize.getHeight() - y - margin;
-        doc.setFillColor(245, 245, 245); doc.rect(margin, y, contentWidth, photoAreaHeight, 'F');
-        const photoMargin = 5; const photoGridWidth = (contentWidth - photoMargin) / 2; const photoGridHeight = (photoAreaHeight - photoMargin) / 2;
-        if (images.delantera) doc.addImage(images.delantera, 'JPEG', col1X, y, photoGridWidth, photoGridHeight);
-        if (images.trasera) doc.addImage(images.trasera, 'JPEG', col1X + photoGridWidth + photoMargin, y, photoGridWidth, photoGridHeight);
-        if (images.detalle) doc.addImage(images.detalle, 'JPEG', col1X, y + photoGridHeight + photoMargin, photoGridWidth, photoGridHeight);
-        if (images.etiqueta) doc.addImage(images.etiqueta, 'JPEG', col1X + photoGridWidth + photoMargin, y + photoGridHeight + photoMargin, photoGridWidth, photoGridHeight);
-
-        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (isIOS) {
+        // --- LÓGICA EXCLUSIVA PARA IPHONE ---
+        // 1. Guardamos los datos "en crudo" que sí caben en sessionStorage
+        const payload = { data, images };
+        sessionStorage.setItem('reclamacionData', JSON.stringify(payload));
         
-        const subject = `Nueva Reclamación de: ${data.empresa} - Factura: ${data.factura}`;
-        const body = `Hola,\n\nHas recibido una nueva reclamación de la empresa: ${data.empresa}.\nPersona de contacto: ${data.contacto}.\n\nTodos los detalles y las imágenes están en el archivo PDF adjunto.\n\nSaludos.`;
-        
-        if (isIOS) {
-            const pdfDataUri = doc.output('datauristring');
-            sessionStorage.setItem('pdfDataUri', pdfDataUri);
-            window.location.href = `confirmacion.html?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        } else {
-            const pdfBlob = doc.output('blob');
+        // 2. Redirigimos a la página de confirmación
+        window.location.href = `confirmacion.html?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    } else {
+        // --- LÓGICA PARA ANDROID Y PC (SIN CAMBIOS, YA FUNCIONA) ---
+        try {
+            const pdfBlob = await createPdfBlob(data, images); // Usamos una nueva función para generar el Blob
             const blobUrl = URL.createObjectURL(pdfBlob);
             window.open(blobUrl, '_blank');
             
@@ -106,16 +91,43 @@ async function generatePdfAndRedirect(data, images) {
             mailtoLink.href = `mailto:nacho@representacionesarroyo.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
             formContainer.style.display = 'none';
             confirmationMessage.style.display = 'block';
+        } catch(error) {
+            console.error("Error detallado:", error);
+            alert('Ha ocurrido un error al generar el PDF.');
+            resetButtonState();
         }
-
-        const formFields = form.querySelectorAll('input[type="text"], input[type="date"], input[type="tel"], textarea');
-        formFields.forEach(field => { localStorage.removeItem(field.id); });
-
-    } catch (error) {
-        console.error("Error detallado:", error);
-        alert('Ha ocurrido un error al generar el PDF.');
-        resetButtonState();
     }
+}
+
+// Nueva función que contiene solo la lógica de dibujar el PDF
+async function createPdfBlob(data, images) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('p', 'mm', 'a4');
+
+    const margin = 10;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const contentWidth = pageWidth - (margin * 2);
+    try { const upowerLogoBase64 = await imageToBase64('img/upower.png'); doc.addImage(upowerLogoBase64, 'PNG', margin, 5, 25, 10); } catch (logoError) { console.warn('Logo de U-Power no encontrado.'); }
+    doc.setFontSize(14); doc.setFont('Helvetica', 'bold'); doc.setTextColor(255, 0, 0); doc.text('RECLAMACION DE GARANTÍAS', pageWidth / 2, 10, { align: 'center' });
+    doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.5); doc.line(margin, 15, pageWidth - margin, 15);
+    let y = 20; const fieldHeight = 8; const labelWidth = 30; const dataWidth = 60; const col1X = margin; const col2X = margin + labelWidth + dataWidth + 10;
+    const drawField = (label, value, x, yPos) => { doc.setFontSize(9); doc.setFont('Helvetica', 'bold'); doc.setFillColor(230, 230, 230); doc.rect(x, yPos, labelWidth, fieldHeight, 'FD'); doc.setTextColor(0, 0, 0); doc.text(label, x + 2, yPos + 5); doc.rect(x + labelWidth, yPos, dataWidth, fieldHeight, 'S'); doc.setFont('Helvetica', 'normal'); doc.text(value || '', x + labelWidth + 2, yPos + 5); };
+    drawField('FECHA', data.fecha, col1X, y); drawField('AGENTE', 'Representaciones Arroyo', col2X, y); y += fieldHeight;
+    drawField('CLIENTE', data.empresa, col1X, y); drawField('CONTACTO', data.contacto, col2X, y); y += fieldHeight;
+    drawField('MODELO', data.modelo, col1X, y); y += fieldHeight;
+    drawField('REF', data.referencia, col1X, y); y += fieldHeight;
+    drawField('TALLA', data.talla, col1X, y); y += fieldHeight + 5;
+    doc.setFontSize(9); doc.setFont('Helvetica', 'bold'); doc.text('DESCRIPCIÓN DEFECTO', col1X, y); y += 3;
+    const descHeight = 30; doc.rect(col1X, y, contentWidth, descHeight, 'S'); doc.setFont('Helvetica', 'normal'); const splitDescription = doc.splitTextToSize(data.defecto, contentWidth - 4); doc.text(splitDescription, col1X + 2, y + 5); y += descHeight + 5;
+    const photoAreaHeight = doc.internal.pageSize.getHeight() - y - margin;
+    doc.setFillColor(245, 245, 245); doc.rect(margin, y, contentWidth, photoAreaHeight, 'F');
+    const photoMargin = 5; const photoGridWidth = (contentWidth - photoMargin) / 2; const photoGridHeight = (photoAreaHeight - photoMargin) / 2;
+    if (images.delantera) doc.addImage(images.delantera, 'JPEG', col1X, y, photoGridWidth, photoGridHeight);
+    if (images.trasera) doc.addImage(images.trasera, 'JPEG', col1X + photoGridWidth + photoMargin, y, photoGridWidth, photoGridHeight);
+    if (images.detalle) doc.addImage(images.detalle, 'JPEG', col1X, y + photoGridHeight + photoMargin, photoGridWidth, photoGridHeight);
+    if (images.etiqueta) doc.addImage(images.etiqueta, 'JPEG', col1X + photoGridWidth + photoMargin, y + photoGridHeight + photoMargin, photoGridWidth, photoGridHeight);
+
+    return doc.output('blob');
 }
 
 function imageToBase64(url) {
