@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- LÓGICA DE PERSISTENCIA DEL FORMULARIO (SOLUCIÓN PARA ANDROID) ---
+    // --- LÓGICA DE PERSISTENCIA DEL FORMULARIO ---
     const form = document.getElementById('reclamacionForm');
     if (form) {
         const formFields = form.querySelectorAll('input[type="text"], input[type="date"], input[type="tel"], textarea');
@@ -99,15 +99,21 @@ async function generatePdfAndShowConfirmation(data, images) {
     const doc = new jsPDF('p', 'mm', 'a4');
 
     try {
-        // ===== CAMBIO CLAVE AQUÍ: Se usa .png en lugar de .avif =====
-        const upowerLogoBase64 = await imageToBase64('img/upower.png');
-        
         const margin = 10;
         const pageWidth = doc.internal.pageSize.getWidth();
         const contentWidth = pageWidth - (margin * 2);
         
-        // Se especifica el formato 'PNG'
-        doc.addImage(upowerLogoBase64, 'PNG', margin, 5, 25, 10);
+        // ===== CAMBIO CLAVE: Carga del logo ahora es opcional y segura =====
+        try {
+            const upowerLogoBase64 = await imageToBase64('img/upower.png');
+            // Si la carga tiene éxito, añadimos la imagen
+            doc.addImage(upowerLogoBase64, 'PNG', margin, 5, 25, 10);
+        } catch (logoError) {
+            // Si la carga falla, mostramos un aviso en la consola y continuamos
+            console.warn('No se pudo cargar el logo de U-Power desde "img/upower.png". El PDF se generará sin él.', logoError);
+        }
+        // =================================================================
+
         doc.setFontSize(14);
         doc.setFont('Helvetica', 'bold');
         doc.setTextColor(255, 0, 0);
@@ -176,15 +182,21 @@ async function generatePdfAndShowConfirmation(data, images) {
         });
 
     } catch (error) {
-        console.error('Error al generar el PDF:', error);
-        alert('Hubo un error al generar el PDF.');
+        console.error('Error general al generar el PDF:', error);
+        alert('Ha ocurrido un error al generar el PDF. Por favor, revisa la consola para más detalles.');
         resetButtonState();
     }
 }
 
 function imageToBase64(url) {
     return fetch(url)
-        .then(response => response.blob())
+        .then(response => {
+            if (!response.ok) {
+                // Lanza un error si la respuesta no es 200 OK (ej. 404 Not Found)
+                throw new Error(`Error de red al cargar la imagen: ${response.statusText}`);
+            }
+            return response.blob();
+        })
         .then(blob => new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onloadend = () => resolve(reader.result);
