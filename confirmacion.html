@@ -9,26 +9,35 @@
 <body>
     <div class="confirm-container">
         <img src="img/logo.jpg" alt="Logo Representaciones Arroyo" class="logo">
-        <h1>¡PDF Generado!</h1>
+        <h1>¡PDF Generado con Éxito!</h1>
         <p>
-            El PDF de tu reclamación se ha abierto en una nueva pestaña. Si tu navegador lo ha bloqueado, por favor, permítele abrir ventanas emergentes.
+            Tu reclamación está lista. Por favor, sigue estos dos sencillos pasos:
         </p>
+
+        <!-- PASO 1: VER Y GUARDAR EL PDF -->
         <div class="step">
-            <h2>Paso Final: Enviar Correo</h2>
-            <p>
-                Abre tu aplicación de correo con el botón de abajo. Estará todo listo, <strong>solo tienes que adjuntar el PDF</strong> desde la pestaña que se acaba de abrir o desde tu carpeta de descargas.
-            </p>
-            <a href="#" id="mailtoLink" class="btn-accion btn-correo">Abrir y Enviar Correo</a>
+            <h2>Paso 1: Guarda tu Reclamación</h2>
+            <p>Haz clic aquí para ver el PDF. Una vez abierto, usa el menú "Compartir" o "Guardar" de tu teléfono para guardarlo en tus archivos.</p>
+            <a href="#" id="viewPdfButton" class="btn-accion btn-ver-pdf" style="display: none;">Ver y Guardar PDF</a>
+            <p id="pdfError" style="display: none; color: #ffcc00;">No se encontró el PDF. Por favor, vuelve atrás y genera la reclamación de nuevo.</p>
         </div>
+
+        <!-- PASO 2: ENVIAR EL CORREO -->
+        <div class="step">
+            <h2>Paso 2: Envíanos el Correo</h2>
+            <p>Ahora, abre tu aplicación de correo. Estará lista para enviar, <strong>solo tienes que adjuntar el PDF que acabas de guardar</strong>.</p>
+            <a href="#" id="mailtoLink" class="btn-accion btn-correo">Abrir Aplicación de Correo</a>
+        </div>
+        <footer style="text-align: center; padding: 20px; color: #cbd5e1;">
+            <small>
+                Powered by Pablo Vidal Vidal & Representaciones Ignacio Arroyo <br>
+                Teléfono: 670 315 792 | Correo: pablo2vbngdaw@gmail.com <br>
+                &copy; 2025 Todos los derechos reservados.
+            </small>
+        </footer>
     </div>
 
-    <footer style="text-align: center; padding: 20px; color: #cbd5e1;">
-        <small>
-            Creado por Pablo Vidal Vidal <br>
-            Teléfono: 670 315 792 | Correo: pablo2vbngdaw@gmail.com <br>
-            &copy; 2025 Todos los derechos reservados.
-        </small>
-    </footer>
+    
 
     <script src="js/confirmacion.js"></script>
 </body>

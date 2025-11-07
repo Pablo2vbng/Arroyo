@@ -1,16 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- 1. LÓGICA DE PERSISTENCIA DEL FORMULARIO (SOLUCIÓN PARA ANDROID) ---
+    // --- LÓGICA DE PERSISTENCIA DEL FORMULARIO ---
     const form = document.getElementById('reclamacionForm');
     const formFields = form.querySelectorAll('input[type="text"], input[type="date"], input[type="tel"], textarea');
-
-    // Función para guardar los datos en el almacenamiento local del navegador
     const saveData = () => {
         formFields.forEach(field => {
             localStorage.setItem(field.id, field.value);
         });
     };
-
-    // Función para cargar los datos guardados cuando la página se (re)carga
     const loadData = () => {
         formFields.forEach(field => {
             const savedValue = localStorage.getItem(field.id);
@@ -19,16 +15,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     };
-
-    // Guardamos los datos cada vez que el usuario escribe algo
     formFields.forEach(field => {
         field.addEventListener('input', saveData);
     });
-
-    // Cargamos los datos guardados en cuanto la página está lista
     loadData();
 
-    // --- 2. LÓGICA DE CONFIRMACIÓN DE SUBIDA DE IMAGEN ---
+    // --- LÓGICA DE CONFIRMACIÓN DE SUBIDA DE IMAGEN ---
     const fileInputs = document.querySelectorAll('input[type="file"]');
     fileInputs.forEach(input => {
         input.addEventListener('change', (event) => {
@@ -44,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// --- 3. LÓGICA PRINCIPAL DE ENVÍO DEL FORMULARIO ---
+// --- LÓGICA PRINCIPAL DE ENVÍO DEL FORMULARIO ---
 const form = document.getElementById('reclamacionForm');
 const submitButton = form.querySelector('.btn-enviar');
 
@@ -53,7 +45,6 @@ form.addEventListener('submit', function(event) {
     submitButton.disabled = true;
     submitButton.textContent = 'Generando PDF...';
 
-    // Limpiamos los datos guardados solo después de un envío exitoso
     const formFields = form.querySelectorAll('input[type="text"], input[type="date"], input[type="tel"], textarea');
     formFields.forEach(field => {
         localStorage.removeItem(field.id);
@@ -174,22 +165,17 @@ async function generatePdfAndRedirect(data, images) {
         if (images.detalle) doc.addImage(images.detalle, 'JPEG', col1X, y + photoGridHeight + photoMargin, photoGridWidth, photoGridHeight);
         if (images.etiqueta) doc.addImage(images.etiqueta, 'JPEG', col1X + photoGridWidth + photoMargin, y + photoGridHeight + photoMargin, photoGridWidth, photoGridHeight);
         
-        // --- CAMBIO CLAVE PARA IPHONE ---
-        // 1. Generamos el PDF como un "Blob", que es un objeto de archivo universal.
-        const pdfBlob = doc.output('blob');
-
-        // 2. Creamos una URL temporal y segura para este Blob.
-        const blobUrl = URL.createObjectURL(pdfBlob);
-
-        // 3. ABRIMOS EL PDF INMEDIATAMENTE. Esto es un resultado directo del clic del usuario,
-        // por lo que los navegadores móviles (incluido iOS Safari) lo permitirán.
-        window.open(blobUrl, '_blank');
+        // --- CAMBIO CLAVE ---
+        // 1. Generamos el PDF como una URL de datos (data URI) que es fácil de almacenar.
+        const pdfDataUri = doc.output('datauristring');
         
-        // 4. Preparamos los datos del correo para la siguiente página.
+        // 2. Guardamos esa URL en el almacenamiento de la sesión del navegador.
+        sessionStorage.setItem('pdfDataUri', pdfDataUri);
+        
+        // 3. Preparamos los datos del correo y redirigimos a la página de confirmación.
         const subject = `Nueva Reclamación de: ${data.empresa} - Factura: ${data.factura}`;
         const body = `Hola,\n\nHas recibido una nueva reclamación de la empresa: ${data.empresa}.\nPersona de contacto: ${data.contacto}.\n\nTodos los detalles y las imágenes están en el archivo PDF adjunto.\n\nSaludos.`;
         
-        // 5. Redirigimos a la página de confirmación.
         window.location.href = `confirmacion.html?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
     } catch (error) {
@@ -199,7 +185,6 @@ async function generatePdfAndRedirect(data, images) {
     }
 }
 
-// --- FUNCIONES AUXILIARES (SIN CAMBIOS) ---
 function imageToBase64(url) {
     return fetch(url)
         .then(response => response.blob())

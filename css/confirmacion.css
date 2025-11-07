@@ -54,20 +54,20 @@ p {
     padding: 1.5rem;
     background-color: rgba(15, 23, 42, 0.8);
     border-radius: 5px;
-    border-left: 5px solid #f97316; /* Naranja */
+    border-left: 5px solid #005A9C; /* Azul para consistencia */
     text-align: left;
 }
 
 .step h2 {
     margin-top: 0;
-    color: #f97316;
+    color: #f97316; /* Naranja */
     font-size: 1.4em;
 }
 
 .btn-accion {
-    display: block;
+    display: inline-block;
     width: 90%;
-    margin: 1.5rem auto 0 auto;
+    margin-top: 1rem;
     padding: 1rem 1.5rem;
     border: none;
     border-radius: 5px;
@@ -80,11 +80,18 @@ p {
     transition: all 0.3s ease;
 }
 
-.btn-correo {
-    background-color: #f97316;
+.btn-ver-pdf {
+    background-color: #005A9C; /* Azul */
     color: #fff;
 }
+.btn-ver-pdf:hover {
+    background-color: #004170;
+}
 
+.btn-correo {
+    background-color: #f97316; /* Naranja */
+    color: #fff;
+}
 .btn-correo:hover {
     background-color: #ea580c;
 }
