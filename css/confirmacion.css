@@ -1,4 +1,3 @@
-/* --- Estilos para la página de confirmación --- */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
 body {
@@ -10,7 +9,7 @@ body {
     margin: 0;
     padding: 2rem;
     display: flex;
-    flex-direction: column; /* Cambiado para alinear el footer */
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
@@ -28,9 +27,9 @@ body {
 }
 
 .logo {
-    width: 100px; /* Reducido para móviles */
-    height: 80px;
-    border-radius: 20px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
     object-fit: cover;
     border: 2px solid #f97316;
     margin-bottom: 1.5rem;
@@ -50,26 +49,25 @@ p {
     color: #cbd5e1;
 }
 
-/* --- NUEVOS ESTILOS PARA LOS PASOS --- */
 .step {
     margin-top: 2rem;
     padding: 1.5rem;
     background-color: rgba(15, 23, 42, 0.8);
     border-radius: 5px;
-    border-left: 5px solid #005A9C; /* Azul para consistencia */
+    border-left: 5px solid #f97316; /* Naranja */
     text-align: left;
 }
 
 .step h2 {
     margin-top: 0;
-    color: #f97316; /* Naranja */
+    color: #f97316;
     font-size: 1.4em;
 }
 
 .btn-accion {
-    display: inline-block;
+    display: block;
     width: 90%;
-    margin-top: 1rem;
+    margin: 1.5rem auto 0 auto;
     padding: 1rem 1.5rem;
     border: none;
     border-radius: 5px;
@@ -82,18 +80,11 @@ p {
     transition: all 0.3s ease;
 }
 
-.btn-ver-pdf {
-    background-color: #005A9C; /* Azul */
+.btn-correo {
+    background-color: #f97316;
     color: #fff;
-}
-.btn-ver-pdf:hover {
-    background-color: #004170;
 }
 
-.btn-correo {
-    background-color: #f97316; /* Naranja */
-    color: #fff;
-}
 .btn-correo:hover {
     background-color: #ea580c;
 }

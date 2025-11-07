@@ -1,15 +1,16 @@
-// --- LÓGICA DE INTERFAZ (SIN CAMBIOS) ---
 document.addEventListener('DOMContentLoaded', () => {
-    // LÓGICA PARA GUARDAR Y RESTAURAR DATOS DEL FORMULARIO
+    // --- 1. LÓGICA DE PERSISTENCIA DEL FORMULARIO (SOLUCIÓN PARA ANDROID) ---
     const form = document.getElementById('reclamacionForm');
     const formFields = form.querySelectorAll('input[type="text"], input[type="date"], input[type="tel"], textarea');
 
+    // Función para guardar los datos en el almacenamiento local del navegador
     const saveData = () => {
         formFields.forEach(field => {
             localStorage.setItem(field.id, field.value);
         });
     };
 
+    // Función para cargar los datos guardados cuando la página se (re)carga
     const loadData = () => {
         formFields.forEach(field => {
             const savedValue = localStorage.getItem(field.id);
@@ -19,12 +20,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    // Guardamos los datos cada vez que el usuario escribe algo
     formFields.forEach(field => {
         field.addEventListener('input', saveData);
     });
+
+    // Cargamos los datos guardados en cuanto la página está lista
     loadData();
 
-    // LÓGICA PARA MENSAJE DE CONFIRMACIÓN DE IMAGEN
+    // --- 2. LÓGICA DE CONFIRMACIÓN DE SUBIDA DE IMAGEN ---
     const fileInputs = document.querySelectorAll('input[type="file"]');
     fileInputs.forEach(input => {
         input.addEventListener('change', (event) => {
@@ -39,7 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// --- LÓGICA PRINCIPAL DEL FORMULARIO (ENVÍO) ---
+
+// --- 3. LÓGICA PRINCIPAL DE ENVÍO DEL FORMULARIO ---
 const form = document.getElementById('reclamacionForm');
 const submitButton = form.querySelector('.btn-enviar');
 
@@ -48,6 +53,7 @@ form.addEventListener('submit', function(event) {
     submitButton.disabled = true;
     submitButton.textContent = 'Generando PDF...';
 
+    // Limpiamos los datos guardados solo después de un envío exitoso
     const formFields = form.querySelectorAll('input[type="text"], input[type="date"], input[type="tel"], textarea');
     formFields.forEach(field => {
         localStorage.removeItem(field.id);
@@ -93,73 +99,58 @@ form.addEventListener('submit', function(event) {
         });
 });
 
-
-// =========================================================================
-// ===== INICIO DE LA MODIFICACIÓN: NUEVA FUNCIÓN DE CREACIÓN DE PDF =====
-// =========================================================================
 async function generatePdfAndRedirect(data, images) {
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF('p', 'mm', 'a4'); // p: portrait, mm: milímetros, a4: tamaño de hoja
+    const doc = new jsPDF('p', 'mm', 'a4');
 
     try {
-        // --- 1. CARGAR LOGO DE U-POWER ---
+        // --- LA CREACIÓN DEL PDF SIGUE SIENDO LA MISMA ---
         const upowerLogoBase64 = await imageToBase64('img/upower.avif');
-
-        // --- 2. DIBUJAR LA ESTRUCTURA DEL PDF ---
         const margin = 10;
         const pageWidth = doc.internal.pageSize.getWidth();
         const contentWidth = pageWidth - (margin * 2);
         
-        // --- Cabecera ---
-        doc.addImage(upowerLogoBase64, 'WEBP', margin, 5, 25, 10); // Usamos WEBP como formato genérico para AVIF
+        doc.addImage(upowerLogoBase64, 'WEBP', margin, 5, 25, 10);
         doc.setFontSize(14);
         doc.setFont('Helvetica', 'bold');
-        doc.setTextColor(255, 0, 0); // Rojo
+        doc.setTextColor(255, 0, 0);
         doc.text('RECLAMACION DE GARANTÍAS', pageWidth / 2, 10, { align: 'center' });
-        doc.setDrawColor(0, 0, 0); // Borde negro
+        doc.setDrawColor(0, 0, 0);
         doc.setLineWidth(0.5);
-        doc.line(margin, 15, pageWidth - margin, 15); // Línea bajo el título
-
-        let y = 20; // Posición Y inicial
+        doc.line(margin, 15, pageWidth - margin, 15);
+        
+        let y = 20;
         const fieldHeight = 8;
         const labelWidth = 30;
         const dataWidth = 60;
         const col1X = margin;
         const col2X = margin + labelWidth + dataWidth + 10;
         
-        // --- Función auxiliar para dibujar un campo ---
         const drawField = (label, value, x, yPos) => {
             doc.setFontSize(9);
             doc.setFont('Helvetica', 'bold');
-            doc.setFillColor(230, 230, 230); // Gris claro para etiquetas
-            doc.rect(x, yPos, labelWidth, fieldHeight, 'FD'); // Caja de etiqueta (Fill y Draw)
+            doc.setFillColor(230, 230, 230);
+            doc.rect(x, yPos, labelWidth, fieldHeight, 'FD');
             doc.setTextColor(0, 0, 0);
             doc.text(label, x + 2, yPos + 5);
-
-            doc.rect(x + labelWidth, yPos, dataWidth, fieldHeight, 'S'); // Caja de datos (Solo Stroke)
+            doc.rect(x + labelWidth, yPos, dataWidth, fieldHeight, 'S');
             doc.setFont('Helvetica', 'normal');
             doc.text(value || '', x + labelWidth + 2, yPos + 5);
         };
 
-        // --- Dibujar Campos en Dos Columnas ---
         drawField('FECHA', data.fecha, col1X, y);
         drawField('AGENTE', 'Representaciones Arroyo', col2X, y);
         y += fieldHeight;
-
-        drawField('CLIENTE', data.empresa, col1X, y); // 'empresa' del form es 'CLIENTE' aquí
+        drawField('CLIENTE', data.empresa, col1X, y);
         drawField('CONTACTO', data.contacto, col2X, y);
         y += fieldHeight;
-
         drawField('MODELO', data.modelo, col1X, y);
         y += fieldHeight;
-        
         drawField('REF', data.referencia, col1X, y);
         y += fieldHeight;
-        
         drawField('TALLA', data.talla, col1X, y);
-        y += fieldHeight + 5; // Espacio extra
+        y += fieldHeight + 5;
 
-        // --- Campo de Descripción ---
         doc.setFontSize(9);
         doc.setFont('Helvetica', 'bold');
         doc.text('DESCRIPCIÓN DEFECTO', col1X, y);
@@ -167,32 +158,38 @@ async function generatePdfAndRedirect(data, images) {
         const descHeight = 30;
         doc.rect(col1X, y, contentWidth, descHeight, 'S');
         doc.setFont('Helvetica', 'normal');
-        const splitDescription = doc.splitTextToSize(data.defecto, contentWidth - 4); // Ajustar texto
+        const splitDescription = doc.splitTextToSize(data.defecto, contentWidth - 4);
         doc.text(splitDescription, col1X + 2, y + 5);
         y += descHeight + 5;
 
-        // --- Área de Fotografías ---
         const photoAreaHeight = doc.internal.pageSize.getHeight() - y - margin;
-        doc.setFillColor(245, 245, 245); // Gris muy claro para el fondo
+        doc.setFillColor(245, 245, 245);
         doc.rect(margin, y, contentWidth, photoAreaHeight, 'F');
         
-        // Colocar imágenes en una cuadrícula 2x2 dentro del área
         const photoMargin = 5;
         const photoGridWidth = (contentWidth - photoMargin) / 2;
         const photoGridHeight = (photoAreaHeight - photoMargin) / 2;
-
         if (images.delantera) doc.addImage(images.delantera, 'JPEG', col1X, y, photoGridWidth, photoGridHeight);
         if (images.trasera) doc.addImage(images.trasera, 'JPEG', col1X + photoGridWidth + photoMargin, y, photoGridWidth, photoGridHeight);
         if (images.detalle) doc.addImage(images.detalle, 'JPEG', col1X, y + photoGridHeight + photoMargin, photoGridWidth, photoGridHeight);
         if (images.etiqueta) doc.addImage(images.etiqueta, 'JPEG', col1X + photoGridWidth + photoMargin, y + photoGridHeight + photoMargin, photoGridWidth, photoGridHeight);
         
-        // --- 3. LÓGICA DE REDIRECCIÓN (SIN CAMBIOS) ---
-        const pdfDataUri = doc.output('datauristring');
-        sessionStorage.setItem('pdfDataUri', pdfDataUri);
+        // --- CAMBIO CLAVE PARA IPHONE ---
+        // 1. Generamos el PDF como un "Blob", que es un objeto de archivo universal.
+        const pdfBlob = doc.output('blob');
+
+        // 2. Creamos una URL temporal y segura para este Blob.
+        const blobUrl = URL.createObjectURL(pdfBlob);
+
+        // 3. ABRIMOS EL PDF INMEDIATAMENTE. Esto es un resultado directo del clic del usuario,
+        // por lo que los navegadores móviles (incluido iOS Safari) lo permitirán.
+        window.open(blobUrl, '_blank');
         
+        // 4. Preparamos los datos del correo para la siguiente página.
         const subject = `Nueva Reclamación de: ${data.empresa} - Factura: ${data.factura}`;
         const body = `Hola,\n\nHas recibido una nueva reclamación de la empresa: ${data.empresa}.\nPersona de contacto: ${data.contacto}.\n\nTodos los detalles y las imágenes están en el archivo PDF adjunto.\n\nSaludos.`;
         
+        // 5. Redirigimos a la página de confirmación.
         window.location.href = `confirmacion.html?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
     } catch (error) {
@@ -201,10 +198,6 @@ async function generatePdfAndRedirect(data, images) {
         resetButton();
     }
 }
-// =========================================================================
-// ===== FIN DE LA MODIFICACIÓN =====
-// =========================================================================
-
 
 // --- FUNCIONES AUXILIARES (SIN CAMBIOS) ---
 function imageToBase64(url) {
