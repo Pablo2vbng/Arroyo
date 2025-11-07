@@ -171,7 +171,7 @@ async function generatePdfAndShowConfirmation(data, images) {
         const subject = `Nueva Reclamación de: ${data.empresa} - Factura: ${data.factura}`;
         const body = `Hola,\n\nHas recibido una nueva reclamación de la empresa: ${data.empresa}.\nPersona de contacto: ${data.contacto}.\n\nTodos los detalles y las imágenes están en el archivo PDF adjunto.\n\nSaludos.`;
         
-        mailtoLink.href = `mailto:nacho@representacionesarroyo.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        mailtoLink.href = `mailto:nacho@representacionesarroyo.es?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
         
         formContainer.style.display = 'none';
         confirmationMessage.style.display = 'block';

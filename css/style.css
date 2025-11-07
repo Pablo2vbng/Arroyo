@@ -4,15 +4,14 @@
 /* --- General Body Styling --- */
 body {
     font-family: 'Roboto', sans-serif;
-    /* Fondo con imagen industrial y un overlay oscuro */
     background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.85)), url(https://www.publicdomainpictures.net/pictures/320000/velka/background-15814524273L3.jpg);
     background-size: cover;
     background-attachment: fixed;
-    color: #f1f5f9; /* Texto casi blanco */
+    color: #f1f5f9;
     margin: 0;
     padding: 2rem;
     display: flex;
-    flex-direction: column; /* Para alinear el footer abajo */
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
@@ -20,10 +19,10 @@ body {
 
 /* --- Form Container --- */
 .container {
-    background-color: rgba(30, 41, 59, 0.9); /* Fondo oscuro semi-transparente */
+    background-color: rgba(30, 41, 59, 0.9);
     padding: 2.5rem;
     border-radius: 8px;
-    border: 1px solid #475569; /* Borde gris-azulado */
+    border: 1px solid #475569;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     width: 100%;
     max-width: 800px;
@@ -33,22 +32,22 @@ body {
 header {
     text-align: center;
     margin-bottom: 2rem;
-    border-bottom: 2px solid #f97316; /* Naranja como acento principal */
+    border-bottom: 2px solid #f97316;
     padding-bottom: 1.5rem;
 }
 
 .logo {
     width: 120px;
-    height: 80px;
-    border-radius: 20px; /* Hace la imagen circular */
-    object-fit: cover; /* Evita que la imagen se deforme */
-    border: 2px solid #f97316; /* Borde naranja */
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #f97316;
     margin-bottom: 1rem;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.4); /* Sombra sutil */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
 }
 
 h1 {
-    color: #fff; /* Blanco */
+    color: #fff;
     text-transform: uppercase;
     letter-spacing: 2px;
     font-size: 1.8rem;
@@ -57,7 +56,7 @@ h1 {
 
 /* --- Fieldsets & Legends --- */
 fieldset {
-    border: 1px solid #475569; /* Borde gris-azulado */
+    border: 1px solid #475569;
     border-radius: 5px;
     padding: 1.5rem;
     margin-bottom: 2rem;
@@ -66,11 +65,11 @@ fieldset {
 
 legend {
     font-weight: bold;
-    color: #f97316; /* Naranja */
+    color: #f97316;
     padding: 0 10px;
     font-size: 1.2em;
     text-transform: uppercase;
-    background-color: #1e293b; /* Mismo color que el fondo del container */
+    background-color: #1e293b;
     position: absolute;
     top: -0.8em;
     left: 1em;
@@ -85,32 +84,25 @@ label {
     display: block;
     margin-bottom: 0.5rem;
     font-weight: bold;
-    color: #cbd5e1; /* Gris claro */
+    color: #cbd5e1;
 }
 
-input[type="text"],
-input[type="date"],
-input[type="tel"],
-textarea,
-input[type="file"] {
+input[type="text"], input[type="date"], input[type="tel"], textarea, input[type="file"] {
     width: 100%;
     padding: 0.8rem;
     border: 1px solid #475569;
     border-radius: 4px;
     box-sizing: border-box;
     font-size: 1em;
-    background-color: #0f172a; /* Fondo azul muy oscuro */
+    background-color: #0f172a;
     color: #f1f5f9;
     transition: all 0.3s ease;
 }
 
 /* --- Focus Effect --- */
-input[type="text"]:focus,
-input[type="date"]:focus,
-input[type="tel"]:focus,
-textarea:focus {
+input[type="text"]:focus, input[type="date"]:focus, input[type="tel"]:focus, textarea:focus {
     outline: none;
-    border-color: #3b82f6; /* Azul brillante al hacer foco */
+    border-color: #3b82f6;
     box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
 }
 
@@ -135,17 +127,15 @@ input[type="file"] {
     flex-grow: 1;
 }
 
-/* Mensaje de confirmación de subida */
 .upload-success-message {
-    color: #22c55e; /* Verde brillante */
+    color: #22c55e;
     font-size: 0.85em;
     font-weight: bold;
-    margin-left: -5px; /* Ajuste para acercarlo */
-    display: none; /* Oculto por defecto */
-    white-space: nowrap; /* Evita que el texto se parta */
+    margin-left: -5px;
+    display: none;
+    white-space: nowrap;
 }
 
-/* Estilo del botón del input file */
 input[type="file"]::file-selector-button {
     background-color: #334155;
     border: none;
@@ -163,8 +153,8 @@ input[type="file"]::file-selector-button:hover {
 .ejemplo-foto {
     width: 70px;
     height: 70px;
-    border-radius: 50%;          /* Hace la imagen circular */
-    border: 3px solid #f97316;   /* Borde naranja de 3px */
+    border-radius: 50%;
+    border: 3px solid #f97316;
     object-fit: cover;
 }
 
@@ -172,7 +162,7 @@ input[type="file"]::file-selector-button:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px; /* Espacio entre la imagen y el texto */
+    gap: 6px;
 }
 
 .ejemplo-texto {
@@ -185,8 +175,8 @@ input[type="file"]::file-selector-button:hover {
 
 /* --- Submit Button --- */
 .btn-enviar {
-    background-color: #f97316; /* Naranja */
-    color: #fff; /* Blanco */
+    background-color: #f97316;
+    color: #fff;
     border: none;
     padding: 1rem;
     border-radius: 5px;
@@ -200,57 +190,18 @@ input[type="file"]::file-selector-button:hover {
 }
 
 .btn-enviar:hover {
-    background-color: #ea580c; /* Naranja más oscuro */
+    background-color: #ea580c;
     box-shadow: 0 0 15px rgba(249, 115, 22, 0.6);
     transform: translateY(-2px);
 }
 
-/* --- Footer --- */
-footer {
-    width: 100%;
-    max-width: 800px;
-    margin-top: 2rem; /* Espacio sobre el footer */
-}
-
-/* --- Responsive Adjustments --- */
-@media (max-width: 600px) {
-    body {
-        padding: 1rem;
-    }
-    .container {
-        padding: 1.5rem;
-    }
-    .input-ejemplo {
-        flex-direction: column;
-        align-items: stretch;
-        padding: 10px;
-    }
-
-    .upload-success-message {
-        text-align: center;
-        margin-top: 10px;
-        margin-left: 0;
-    }
-
-    .ejemplo-wrapper {
-        margin-top: 10px;
-        align-self: center;
-    }
-}
-/* --- Submit Button --- */
-.btn-enviar {
-    background-color: #f97316; /* Naranja */
-    /* ... (otros estilos del botón) ... */
-}
-/* ... (otros estilos del botón) ... */
-
-/* ===== INICIO DE LA MODIFICACIÓN: ESTILOS PARA EL MENSAJE DE CONFIRMACIÓN ===== */
+/* --- Confirmation Message Styles --- */
 #confirmationMessage .step {
     margin-top: 2rem;
     padding: 1.5rem;
     background-color: rgba(15, 23, 42, 0.8);
     border-radius: 5px;
-    border-left: 5px solid #f97316; /* Naranja */
+    border-left: 5px solid #f97316;
     text-align: left;
 }
 
@@ -280,6 +231,7 @@ footer {
     background-color: #f97316;
     color: #fff;
 }
+
 #confirmationMessage .btn-correo:hover {
     background-color: #ea580c;
 }
@@ -301,7 +253,77 @@ footer {
     background-color: #475569;
     color: #fff;
 }
+
+/* ===== INICIO DE LA MODIFICACIÓN: Animación de Brillo ===== */
+
+/* 1. Definimos la animación "glow" */
+@keyframes glow {
+    0%, 100% {
+        /* Estado inicial y final: un brillo sutil */
+        text-shadow: 0 0 5px rgba(249, 115, 22, 0.5);
+    }
+    50% {
+        /* Estado intermedio: el brillo es más intenso y el texto más claro */
+        color: #fff;
+        text-shadow: 0 0 15px #f97316, 0 0 20px #f97316;
+    }
+}
+
+/* 2. Aplicamos la animación al texto en negrita del mensaje de confirmación */
+#confirmationMessage strong {
+    color: #f97316; /* Color naranja base para que siempre destaque */
+    animation: glow 2s ease-in-out infinite; /* Aplicamos la animación en un bucle infinito */
+}
 /* ===== FIN DE LA MODIFICACIÓN ===== */
 
+
+/* --- Footer --- */
+footer {
+    width: 100%;
+    max-width: 800px;
+    margin-top: 2rem;
+}
+
+.contact-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    margin: 8px 0;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.contact-icon {
+    width: 1em;
+    height: 1em;
+}
+
 /* --- Responsive Adjustments --- */
-/* ... (El resto del CSS de responsive sin cambios) ... */
+@media (max-width: 600px) {
+    body {
+        padding: 1rem;
+    }
+    .container {
+        padding: 1.5rem;
+    }
+    .input-ejemplo {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 10px;
+    }
+    .upload-success-message {
+        text-align: center;
+        margin-top: 10px;
+        margin-left: 0;
+    }
+    .ejemplo-wrapper {
+        margin-top: 10px;
+        align-self: center;
+    }
+}
