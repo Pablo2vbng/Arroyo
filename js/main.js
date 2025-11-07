@@ -103,17 +103,13 @@ async function generatePdfAndShowConfirmation(data, images) {
         const pageWidth = doc.internal.pageSize.getWidth();
         const contentWidth = pageWidth - (margin * 2);
         
-        // ===== CAMBIO CLAVE: Carga del logo ahora es opcional y segura =====
         try {
             const upowerLogoBase64 = await imageToBase64('img/upower.png');
-            // Si la carga tiene éxito, añadimos la imagen
             doc.addImage(upowerLogoBase64, 'PNG', margin, 5, 25, 10);
         } catch (logoError) {
-            // Si la carga falla, mostramos un aviso en la consola y continuamos
             console.warn('No se pudo cargar el logo de U-Power desde "img/upower.png". El PDF se generará sin él.', logoError);
         }
-        // =================================================================
-
+        
         doc.setFontSize(14);
         doc.setFont('Helvetica', 'bold');
         doc.setTextColor(255, 0, 0);
@@ -160,10 +156,20 @@ async function generatePdfAndShowConfirmation(data, images) {
         if (images.detalle) doc.addImage(images.detalle, 'JPEG', col1X, y + photoGridHeight + photoMargin, photoGridWidth, photoGridHeight);
         if (images.etiqueta) doc.addImage(images.etiqueta, 'JPEG', col1X + photoGridWidth + photoMargin, y + photoGridHeight + photoMargin, photoGridWidth, photoGridHeight);
         
-        const pdfBlob = doc.output('blob');
-        const blobUrl = URL.createObjectURL(pdfBlob);
-        window.open(blobUrl, '_blank');
+        // ===== CAMBIO CLAVE PARA MÁXIMA COMPATIBILIDAD =====
+        // 1. Generamos el PDF como una URL de Datos (Data URI)
+        const pdfDataUri = doc.output('datauristring');
+        const pdfName = `reclamacion_${data.empresa.replace(/\s/g, '_')}.pdf`;
         
+        // 2. Buscamos nuestro enlace invisible y le asignamos los datos del PDF
+        const pdfLink = document.getElementById('pdfLink');
+        pdfLink.href = pdfDataUri;
+        pdfLink.download = pdfName; // Esto hace que en Android/PC se descargue. iOS lo ignora y lo abre.
+        
+        // 3. Hacemos clic en el enlace. Esta es la acción que abre/descarga el PDF.
+        pdfLink.click();
+        
+        // 4. Mostramos el mensaje de confirmación
         const formContainer = document.getElementById('formContainer');
         const confirmationMessage = document.getElementById('confirmationMessage');
         const mailtoLink = document.getElementById('mailtoLink');
@@ -171,11 +177,12 @@ async function generatePdfAndShowConfirmation(data, images) {
         const subject = `Nueva Reclamación de: ${data.empresa} - Factura: ${data.factura}`;
         const body = `Hola,\n\nHas recibido una nueva reclamación de la empresa: ${data.empresa}.\nPersona de contacto: ${data.contacto}.\n\nTodos los detalles y las imágenes están en el archivo PDF adjunto.\n\nSaludos.`;
         
-        mailtoLink.href = `mailto:nacho@representacionesarroyo.es?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        mailtoLink.href = `mailto:nacho@representacionesarroyo.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
         
         formContainer.style.display = 'none';
         confirmationMessage.style.display = 'block';
 
+        // 5. Limpiamos los datos guardados ahora que el proceso ha finalizado con éxito
         const formFields = form.querySelectorAll('input[type="text"], input[type="date"], input[type="tel"], textarea');
         formFields.forEach(field => {
             localStorage.removeItem(field.id);
@@ -192,7 +199,6 @@ function imageToBase64(url) {
     return fetch(url)
         .then(response => {
             if (!response.ok) {
-                // Lanza un error si la respuesta no es 200 OK (ej. 404 Not Found)
                 throw new Error(`Error de red al cargar la imagen: ${response.statusText}`);
             }
             return response.blob();
