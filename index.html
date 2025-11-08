@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Reclamación - Representaciones Arroyo</title>
     <link rel="stylesheet" href="css/style.css">
-    <!-- Elimina la línea si existiera: <link rel="stylesheet" href="css/confirmacion.css"> -->
 </head>
 <body>
     <div class="container">
         <div id="formContainer">
-            <!-- ===== INICIO DE LA MODIFICACIÓN ===== -->
             <header>
                 <div class="header-logos">
                     <img src="img/logo.jpg" alt="Logo Representaciones Arroyo" class="logo">
@@ -18,10 +16,8 @@
                 </div>
                 <h1>FORMULARIO DE GESTIÓN DE GARANTÍAS CALZADO</h1>
             </header>
-            <!-- ===== FIN DE LA MODIFICACIÓN ===== -->
 
             <form id="reclamacionForm">
-                <!-- Fieldsets (sin cambios) -->
                 <fieldset>
                     <legend>Datos del Cliente</legend>
                     <div class="campo"><label for="fecha">Fecha:</label><input type="date" id="fecha" name="fecha" required></div>
@@ -48,7 +44,7 @@
             </form>
         </div>
 
-        <!-- Esta sección de confirmación YA LA TIENES en index.html, no la muevas -->
+        <!-- Confirmación se muestra en esta misma página (index.html) -->
         <div id="confirmationMessage" style="display: none; text-align: center;">
             <img src="img/logo.jpg" alt="Logo Representaciones Arroyo" class="logo">
             <h1>¡PDF Generado!</h1>
@@ -60,7 +56,9 @@
             <div class="step">
                 <h2>Paso Final: Enviar Correo</h2>
                 <p>Abre tu aplicación de correo con el botón de abajo. Estará todo listo, <strong class="glow">RECUERDA ADJUNTAR EL PDF</strong> que acabas de guardar.</p>
-                <a href="#" id="mailtoLink" class="btn-accion btn-correo">Abrir y Enviar Correo</a>
+                <!-- NOTA: Los href de estos enlaces se establecerán dinámicamente en main.js -->
+                <a href="#" id="finalPdfLink" class="btn-accion btn-ver-pdf" target="_blank">Ver y Guardar PDF</a>
+                <a href="#" id="finalMailtoLink" class="btn-accion btn-correo">Abrir y Enviar Correo</a>
             </div>
             <button id="resetButton" class="btn-nuevo-form">Crear otra reclamación</button>
         </div>
@@ -70,7 +68,6 @@
         <small>
             Desarrollado por Pablo Vidal Vidal
             <div class="contact-info">
-                
                 <span class="contact-item">
                     <svg class="contact-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/></svg>
                     pablo2vbngdaw@gmail.com
@@ -82,6 +79,5 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="js/main.js"></script>
-    <!-- Elimina la línea si existiera: <script src="js/confirmacion.js"></script> -->
 </body>
 </html>
