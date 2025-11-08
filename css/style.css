@@ -14,7 +14,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* --- Form Container --- */
+/* --- Main Container --- */
 .container {
     background-color: #ffffff;
     padding: 3rem;
@@ -24,8 +24,6 @@ body {
     max-width: 800px;
 }
 
-/* ===== INICIO DE LA MODIFICACIÓN ===== */
-
 /* --- Header & Logo --- */
 header {
     text-align: center;
@@ -34,32 +32,27 @@ header {
     padding-bottom: 2rem;
 }
 
-/* Nuevo contenedor para alinear los logos */
 .header-logos {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 30px; /* Espacio entre los logos */
+    gap: 30px;
     margin-bottom: 1.5rem;
 }
 
-/* Logo de Arroyo (más grande) */
 .logo {
-    width: 160px; /* Aumentado de 100px */
-    height: 90px; /* Aumentado de 100px */
+    width: 160px;
+    height: 90px;
     object-fit: cover;
     border: 1px solid grey;
     padding: 2px;
     border-radius: 10px;
 }
 
-/* Nuevo logo de U-Power */
 .upower-logo {
-    height: 50px; /* Altura controlada */
-    width: auto;  /* Ancho automático para mantener la proporción */
+    height: 50px;
+    width: auto;
 }
-
-/* ===== FIN DE LA MODIFICACIÓN ===== */
 
 h1 {
     color: #000;
@@ -83,82 +76,94 @@ legend {
     font-size: 1.5em;
 }
 
-/* (El resto del CSS permanece igual) */
+/* --- Form Fields & Inputs --- */
 .campo { margin-bottom: 1.5rem; }
 .campo-foto { margin-bottom: 2.5rem; }
 label { display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 1.1em; color: #333; }
 .label-descripcion { font-size: 0.9em; color: #6e6e73; margin-top: -5px; margin-bottom: 15px; }
-input[type="text"], input[type="date"], input[type="tel"], textarea { width: 100%; padding: 14px; border: 1px solid #dcdcdc; border-radius: 12px; box-sizing: border-box; font-size: 1em; font-family: inherit; background-color: #f5f5f7; color: #1d1d1f; transition: all 0.2s ease-in-out; }
-input[type="text"]:focus, input[type="date"]:focus, input[type="tel"]:focus, textarea:focus { outline: none; border-color: #0071e3; background-color: #fff; box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.2); }
+
+input[type="text"], input[type="date"], input[type="tel"], textarea {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #dcdcdc;
+    border-radius: 12px;
+    box-sizing: border-box;
+    font-size: 1em;
+    font-family: inherit;
+    background-color: #f5f5f7;
+    color: #1d1d1f;
+    transition: all 0.2s ease-in-out;
+}
+
+input[type="text"]:focus, input[type="date"]:focus, input[type="tel"]:focus, textarea:focus {
+    outline: none;
+    border-color: #0071e3;
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.2);
+}
+
 textarea { resize: vertical; min-height: 120px; }
-.input-ejemplo { display: flex; justify-content: space-between; align-items: center; gap: 20px; background-color: #f5f5f7; border-radius: 12px; padding: 15px; border: 1px solid #dcdcdc; }
+
+.input-ejemplo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    background-color: #f5f5f7;
+    border-radius: 12px;
+    padding: 15px;
+    border: 1px solid #dcdcdc;
+}
+
 .upload-area { flex-grow: 1; }
 input[type="file"] { width: 100%; }
-input[type="file"]::file-selector-button { background-color: #fff; border: 1px solid #dcdcdc; border-radius: 8px; padding: 10px 15px; color: #0071e3; font-weight: 500; cursor: pointer; margin-right: 1rem; transition: background-color 0.2s ease; }
+input[type="file"]::file-selector-button {
+    background-color: #fff;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    padding: 10px 15px;
+    color: #0071e3;
+    font-weight: 500;
+    cursor: pointer;
+    margin-right: 1rem;
+    transition: background-color 0.2s ease;
+}
 input[type="file"]::file-selector-button:hover { background-color: #e8e8e8; }
 .upload-success-message { color: #30d158; font-size: 0.9em; font-weight: 500; display: none; margin-top: 10px; }
 .ejemplo-wrapper { text-align: center; }
 .ejemplo-foto { width: 120px; height: 120px; border-radius: 12px; border: 1px solid #dcdcdc; object-fit: cover; display: block; }
 .ejemplo-texto { color: #6e6e73; font-size: 0.9em; font-weight: 500; margin-top: 8px; }
-.btn-enviar { background-color: #0071e3; color: #fff; border: none; padding: 18px; border-radius: 12px; cursor: pointer; font-size: 1.1em; font-weight: 600; width: 100%; transition: all 0.2s ease; }
-.btn-enviar:hover { background-color: #0077ed; transform: translateY(-2px); }
-#confirmationMessage { text-align: center; }
-#confirmationMessage .step { margin-top: 2rem; padding: 1.5rem; background-color: #f5f5f7; border-radius: 12px; text-align: center; }
-#confirmationMessage .step h2 { margin-top: 0; color: #1d1d1f; font-size: 1.4em; font-weight: 600; }
-#confirmationMessage .btn-accion { display: block; width: 90%; margin: 1.5rem auto 0 auto; padding: 1rem 1.5rem; border-radius: 12px; cursor: pointer; font-size: 1.1em; font-weight: 500; text-decoration: none; text-align: center; transition: all 0.2s ease; }
-#confirmationMessage .btn-ver-pdf { background-color: #333; color: #fff; }
-#confirmationMessage .btn-ver-pdf:hover { background-color: #000; }
-#confirmationMessage .btn-correo { background-color: #0071e3; color: #fff; }
-#confirmationMessage .btn-correo:hover { background-color: #0077ed; }
-#confirmationMessage .btn-nuevo-form { margin-top: 2rem; background: none; border: 1px solid #dcdcdc; color: #0071e3; padding: 0.8rem 1.5rem; font-size: 0.9em; font-weight: 500; border-radius: 12px; cursor: pointer; transition: all 0.2s ease; }
-#confirmationMessage .btn-nuevo-form:hover { background-color: #f5f5f7; }
-#confirmationMessage .glow, #confirmationMessage strong { color: #0071e3; font-weight: 600; }
+
+/* --- Form Submit Button --- */
+.btn-enviar {
+    background-color: #0071e3;
+    color: #fff;
+    border: none;
+    padding: 18px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+.btn-enviar:hover {
+    background-color: #0077ed;
+    transform: translateY(-2px);
+}
+
+/* --- Footer --- */
 footer { text-align: center; padding: 20px 0 0 0; color: #86868b; }
 .contact-info { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 10px 20px; margin: 8px 0; }
 .contact-item { display: flex; align-items: center; gap: 8px; }
 .contact-icon { width: 1em; height: 1em; }
 
-@media (max-width: 600px) {
-    body { padding: 1rem 0; }
-    /* ===== LÍNEA MODIFICADA AQUÍ ===== */
-    .container { width: 90%; padding: 1.5rem; border-radius: 12px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); border: 1px solid #e5e5e5; }
-    .header-logos { flex-direction: column; gap: 20px; }
-    .input-ejemplo { flex-direction: column; }
-    h1 { font-size: 1.8rem; }
-    legend { font-size: 1.3em; }
-}
 
-@media (min-width: 601px) {
-    .container {
-        width: 90%;
-    }
-}
-/* --- General Body Styling --- */
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
-    background-color: #ffffff; /* Cambiado de #f5f5f7 a #ffffff */
-    color: #1d1d1f;
-    margin: 0;
-    padding: 2.5rem 1rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-/* --- Form Container --- */
-.container {
-    background-color: #ffffff;
-    padding: 3rem;
-    border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 800px;
-}
-/* --- Estilos de la Pantalla de Confirmación --- */
+/*
+============================================================
+--- ESTILOS DE LA PANTALLA DE CONFIRMACIÓN (CORREGIDOS) ---
+============================================================
+*/
 
 #confirmationContainer .step {
     background-color: #f5f5f7;
@@ -191,16 +196,16 @@ body {
     border-radius: 4px;
 }
 
-/* Estilo base para todos los botones de la sección */
+/* Estilo base para TODOS los botones de la sección (<a> y <button>) */
 #confirmationContainer .btn-accion {
     display: block;
     width: 100%;
-    box-sizing: border-box;
+    box-sizing: border-box; /* Importante para que el padding no rompa el ancho */
     padding: 16px;
     margin-top: 1rem;
     font-size: 1.1em;
     font-weight: 600;
-    text-decoration: none;
+    text-decoration: none; /* Quita el subrayado de los enlaces <a> */
     text-align: center;
     border-radius: 12px;
     border-style: solid;
@@ -217,7 +222,7 @@ body {
 }
 
 #confirmationContainer .btn-principal:hover {
-    background-color: #005bb5; /* Un azul más oscuro */
+    background-color: #005bb5;
     border-color: #005bb5;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 113, 227, 0.2);
@@ -228,16 +233,39 @@ body {
     background-color: transparent;
     color: #0071e3;
     border-color: #0071e3;
-    margin-top: 2rem;
+    margin-top: 2rem; /* Más espacio arriba */
 }
 
 #confirmationContainer .btn-secundario:hover {
-    background-color: rgba(0, 113, 227, 0.05); /* Tinte azul muy sutil */
+    background-color: rgba(0, 113, 227, 0.05);
     transform: translateY(-2px);
 }
 
-/* Pequeño ajuste para el texto resaltado "RECUERDA ADJUNTAR..." */
+/* Texto resaltado */
 #confirmationContainer .glow {
     color: #d63324;
     font-weight: 700;
+}
+
+
+/* --- Media Queries for Responsiveness --- */
+@media (max-width: 600px) {
+    body { padding: 1rem 0; }
+    .container {
+        width: 100%;
+        padding: 1.5rem;
+        border-radius: 0; /* Ocupa toda la pantalla en móviles pequeños */
+        box-shadow: none;
+        border: none;
+    }
+    .header-logos { flex-direction: column; gap: 20px; }
+    .input-ejemplo { flex-direction: column; }
+    h1 { font-size: 1.8rem; }
+    legend { font-size: 1.3em; }
+}
+
+@media (min-width: 601px) {
+    .container {
+        width: 90%;
+    }
 }
