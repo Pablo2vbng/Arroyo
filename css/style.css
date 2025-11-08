@@ -46,10 +46,11 @@ header {
 /* Logo de Arroyo (más grande) */
 .logo {
     width: 160px; /* Aumentado de 100px */
-    height: 120px; /* Aumentado de 100px */
-   
+    height: 90px; /* Aumentado de 100px */
     object-fit: cover;
-    
+    border: 1px solid grey;
+    padding: 2px;
+    border-radius: 10px;
 }
 
 /* Nuevo logo de U-Power */
