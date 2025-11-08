@@ -60,7 +60,7 @@ form.addEventListener('submit', async (event) => {
         const mailtoLink = document.getElementById('mailtoLink');
         const subject = `Nueva Reclamación de: ${data.empresa} - Factura: ${data.factura || 'N/A'}`;
         const body = `Hola,\n\nHas recibido una nueva reclamación de la empresa: ${data.empresa}.\nPersona de contacto: ${data.contacto}.\n\nTodos los detalles y las imágenes están en el archivo PDF adjunto.\n\nSaludos.`;
-        mailtoLink.href = `mailto:nacho@representacionesarroyo.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        mailtoLink.href = `mailto:nacho@representacionesarroyo.es,paloma@representacionesarroyo.es?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
         // Cambiar a la vista de "Confirmación"
         loadingContainer.style.display = 'none';
