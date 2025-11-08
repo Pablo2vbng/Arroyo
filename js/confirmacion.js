@@ -46,10 +46,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const body = params.get('body');
 
     if (subject && body) {
-        const recipient = 'nacho@representacionesarroyo.com';
+        const recipient = 'nacho@representacionesarroyo.es';
         mailtoLinkElement.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
     } else {
-        mailtoLinkElement.href = 'mailto:nacho@representacionesarroyo.com';
+        mailtoLinkElement.href = 'mailto:nacho@representacionesarroyo.es';
     }
 });
 

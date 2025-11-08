@@ -26,7 +26,7 @@ body {
     max-width: 700px;
 }
 
-.logo { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #f97316; margin-bottom: 1.5rem; }
+.logo { width: 100px; height: 100px; object-fit: cover; margin-bottom: 1.5rem; }
 h1 { color: #fff; text-transform: uppercase; letter-spacing: 1px; font-size: 1.8rem; margin-bottom: 1rem; }
 p { font-size: 1rem; line-height: 1.6; color: #cbd5e1; }
 
@@ -49,3 +49,9 @@ footer { width: 100%; max-width: 700px; margin-top: 2rem; }
 .contact-info { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 10px 20px; margin: 8px 0; }
 .contact-item { display: flex; align-items: center; gap: 8px; }
 .contact-icon { width: 1em; height: 1em; }
+@media (min-width: 601px) {
+    .container {
+        width: 90%; /* Ancho del formulario al 90% */
+        max-width: 800px; /* Mantenemos el ancho máximo para pantallas muy grandes */
+    }
+}
