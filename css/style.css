@@ -158,3 +158,86 @@ body {
     width: 100%;
     max-width: 800px;
 }
+/* --- Estilos de la Pantalla de Confirmación --- */
+
+#confirmationContainer .step {
+    background-color: #f5f5f7;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+    text-align: left;
+}
+
+#confirmationContainer .step h2 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-size: 1.4rem;
+    color: #1d1d1f;
+    font-weight: 600;
+}
+
+#confirmationContainer .step p {
+    color: #6e6e73;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+#confirmationContainer .step p.ios-instruction {
+    font-size: 0.9em;
+    background-color: #e5edff;
+    border-left: 3px solid #0071e3;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+/* Estilo base para todos los botones de la sección */
+#confirmationContainer .btn-accion {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 16px;
+    margin-top: 1rem;
+    font-size: 1.1em;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 12px;
+    border-style: solid;
+    border-width: 2px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Estilo para los botones principales (azules) */
+#confirmationContainer .btn-principal {
+    background-color: #0071e3;
+    color: white;
+    border-color: #0071e3;
+}
+
+#confirmationContainer .btn-principal:hover {
+    background-color: #005bb5; /* Un azul más oscuro */
+    border-color: #005bb5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 113, 227, 0.2);
+}
+
+/* Estilo para el botón secundario (Crear otra reclamación) */
+#confirmationContainer .btn-secundario {
+    background-color: transparent;
+    color: #0071e3;
+    border-color: #0071e3;
+    margin-top: 2rem;
+}
+
+#confirmationContainer .btn-secundario:hover {
+    background-color: rgba(0, 113, 227, 0.05); /* Tinte azul muy sutil */
+    transform: translateY(-2px);
+}
+
+/* Pequeño ajuste para el texto resaltado "RECUERDA ADJUNTAR..." */
+#confirmationContainer .glow {
+    color: #d63324;
+    font-weight: 700;
+}
