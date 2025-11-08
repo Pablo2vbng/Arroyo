@@ -1,11 +1,18 @@
-// Declaramos las variables fuera para que sean accesibles en todo el script
+// Declarar variables de vistas y estado en un ámbito accesible
+const formContainer = document.getElementById('formContainer');
+const loadingContainer = document.getElementById('loadingContainer');
+const confirmationContainer = document.getElementById('confirmationContainer');
 const form = document.getElementById('reclamacionForm');
-const submitButton = form.querySelector('.btn-enviar');
-let formFields; // Corregido el ámbito
+const viewPdfButton = document.getElementById('viewPdfButton');
+
+let formFields;
+let generatedPdfBlobUrl = null; // Guardaremos la URL del PDF aquí
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Asignar formFields una vez que el DOM está listo
     formFields = form.querySelectorAll('input[type="text"], input[type="date"], input[type="tel"], textarea');
 
+    // Lógica para guardar y cargar datos del formulario en localStorage
     const saveData = () => formFields.forEach(field => localStorage.setItem(field.id, field.value));
     const loadData = () => {
         formFields.forEach(field => {
@@ -13,10 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (savedValue) field.value = savedValue;
         });
     };
-
     formFields.forEach(field => field.addEventListener('input', saveData));
     loadData();
 
+    // Lógica para mostrar feedback de subida de archivos
     const fileInputs = document.querySelectorAll('input[type="file"]');
     fileInputs.forEach(input => {
         input.addEventListener('change', (event) => {
@@ -24,48 +31,67 @@ document.addEventListener('DOMContentLoaded', () => {
             successMessage.style.display = event.target.files.length > 0 ? 'inline' : 'none';
         });
     });
+
+    // Botón para crear una nueva reclamación
+    const resetButton = document.getElementById('resetButton');
+    resetButton.addEventListener('click', () => {
+        formFields.forEach(field => localStorage.removeItem(field.id));
+        window.location.reload();
+    });
 });
 
-form.addEventListener('submit', async function(event) {
+// Event listener para el envío del formulario
+form.addEventListener('submit', async (event) => {
     event.preventDefault();
-    submitButton.disabled = true;
-    submitButton.textContent = 'Generando PDF...';
+    
+    // Cambiar a la vista de "Cargando"
+    formContainer.style.display = 'none';
+    loadingContainer.style.display = 'block';
 
     const formData = new FormData(form);
-    const data = {};
-    formData.forEach((value, key) => {
-        if (typeof value === 'string') data[key] = value;
-    });
+    const data = Object.fromEntries(formData.entries());
 
     try {
         const images = await getImagesAsBase64();
         const pdfBlob = await generatePdfBlob(data, images);
+        generatedPdfBlobUrl = URL.createObjectURL(pdfBlob); // Guardar la URL del blob
 
-        // Convertir el Blob del PDF a una cadena Base64 para guardarlo
-        const pdfBase64 = await blobToBase64(pdfBlob);
-        sessionStorage.setItem('pdfData', pdfBase64);
-
-        // Preparar parámetros para el correo y redirigir
+        // Configurar el enlace de correo
+        const mailtoLink = document.getElementById('mailtoLink');
         const subject = `Nueva Reclamación de: ${data.empresa} - Factura: ${data.factura || 'N/A'}`;
         const body = `Hola,\n\nHas recibido una nueva reclamación de la empresa: ${data.empresa}.\nPersona de contacto: ${data.contacto}.\n\nTodos los detalles y las imágenes están en el archivo PDF adjunto.\n\nSaludos.`;
-        
-        window.location.href = `confirmacion.html?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        mailtoLink.href = `mailto:nacho@representacionesarroyo.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
-        formFields.forEach(field => localStorage.removeItem(field.id));
+        // Cambiar a la vista de "Confirmación"
+        loadingContainer.style.display = 'none';
+        confirmationContainer.style.display = 'block';
+
     } catch (error) {
         alert(error.message || 'Hubo un problema al generar el PDF.');
-        resetButtonState();
+        // Volver a la vista del formulario si hay un error
+        loadingContainer.style.display = 'none';
+        formContainer.style.display = 'block';
     }
 });
 
+// Event listener para el botón "Ver y Guardar PDF" (el segundo clic)
+viewPdfButton.addEventListener('click', () => {
+    if (generatedPdfBlobUrl) {
+        window.open(generatedPdfBlobUrl, '_blank');
+        // Limpiar localStorage DESPUÉS de que el usuario haya visto el PDF
+        formFields.forEach(field => localStorage.removeItem(field.id));
+    } else {
+        alert("Error: No se ha generado ningún PDF.");
+    }
+});
+
+// --- FUNCIONES AUXILIARES ---
+
 function getImagesAsBase64() {
     const fileInputs = [
-        document.getElementById('fotoDelantera'),
-        document.getElementById('fotoTrasera'),
-        document.getElementById('fotoDetalleDefecto'),
-        document.getElementById('fotoEtiqueta')
+        document.getElementById('fotoDelantera'), document.getElementById('fotoTrasera'),
+        document.getElementById('fotoDetalleDefecto'), document.getElementById('fotoEtiqueta')
     ];
-
     const filePromises = fileInputs.map(input => {
         return new Promise((resolve, reject) => {
             if (input.files && input.files[0]) {
@@ -78,17 +104,13 @@ function getImagesAsBase64() {
             }
         });
     });
-
-    return Promise.all(filePromises).then(([delantera, trasera, detalle, etiqueta]) => {
-        return { delantera, trasera, detalle, etiqueta };
-    });
+    return Promise.all(filePromises).then(([delantera, trasera, detalle, etiqueta]) => ({ delantera, trasera, detalle, etiqueta }));
 }
 
 async function generatePdfBlob(data, images) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('p', 'mm', 'a4');
     
-    // Aquí va toda la lógica de creación del PDF que ya teníamos
     const margin = 10;
     const pageWidth = doc.internal.pageSize.getWidth();
     const contentWidth = pageWidth - (margin * 2);
@@ -102,8 +124,7 @@ async function generatePdfBlob(data, images) {
 
     doc.setFontSize(14).setFont('Helvetica', 'bold').setTextColor(255, 0, 0);
     doc.text('RECLAMACION DE GARANTÍAS', pageWidth / 2, 10, { align: 'center' });
-    doc.setDrawColor(0, 0, 0).setLineWidth(0.5);
-    doc.line(margin, 15, pageWidth - margin, 15);
+    doc.setDrawColor(0, 0, 0).setLineWidth(0.5).line(margin, 15, pageWidth - margin, 15);
 
     let y = 20;
     const fieldHeight = 8, labelWidth = 30, dataWidth = 60;
@@ -146,21 +167,16 @@ async function generatePdfBlob(data, images) {
     return doc.output('blob');
 }
 
-// Funciones auxiliares
 function imageToBase64(url) {
-    return fetch(url).then(res => res.blob()).then(blob => blobToBase64(blob));
-}
-
-function blobToBase64(blob) {
     return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
+        fetch(url)
+            .then(res => res.blob())
+            .then(blob => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+            })
+            .catch(reject);
     });
-}
-
-function resetButtonState() {
-    submitButton.disabled = false;
-    submitButton.textContent = 'Generar Reclamación';
 }
